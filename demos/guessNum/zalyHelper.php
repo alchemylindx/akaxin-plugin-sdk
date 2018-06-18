@@ -49,7 +49,7 @@ class ZalyHelper
         $this->akaxinApiClient->setSessionSiteUserId($siteSessionId);
     }
 
-    
+
     /**
      * @param $siteSessionId
      * @return bool|string
@@ -213,8 +213,58 @@ class ZalyHelper
         $requestMessage->setProxyMsg($message);
         $this->setSiteSessionId($siteSessionId);
         $this->akaxinApiClient->request("/hai/message/proxy", $requestMessage);
-
     }
+
+    /**
+     * 二人文本消息
+     */
+    public function setU2TextMsgByApiClient($chatSessionId, $siteUserId, $text)
+    {
+        $msgId = $this->generateMsgId($this->msg_type_u2, $siteUserId);
+        $msgTime = $this->getMsectime();
+
+        $textMsg = new Akaxin\Proto\Core\MsgText();
+        $textMsg->setSiteUserId($siteUserId);
+        $textMsg->setSiteFriendId($chatSessionId);
+        $textMsg->setMsgId($msgId);
+        $textMsg->setText($text);
+        $textMsg->setTime($msgTime);
+
+        $message = new Akaxin\Proto\Site\ImCtsMessageRequest();
+        $message->setType(\Akaxin\Proto\Core\MsgType::TEXT);
+        $message->settext($textMsg);
+
+        $requestMessage = new Akaxin\Proto\Plugin\HaiMessageProxyRequest();
+        $requestMessage->setProxyMsg($message);
+        $this->setSiteSessionId($siteSessionId);
+        $this->akaxinApiClient->request("/hai/message/proxy", $requestMessage);
+    }
+
+    /**
+     * 群组文本消息
+     */
+    public function setGroupTextMsgByApiClient($chatSessionId, $siteUserId, $text)
+    {
+        $msgId = $this->generateMsgId($this->msg_type_u2, $siteUserId);
+        $msgTime = $this->getMsectime();
+
+        $textMsg = new Akaxin\Proto\Core\GroupText();
+        $textMsg->setSiteUserId($siteUserId);
+        $textMsg->setSiteGroupId($chatSessionId);
+        $textMsg->setMsgId($msgId);
+        $textMsg->setText($text);
+        $textMsg->setTime($msgTime);
+
+        $message = new Akaxin\Proto\Site\ImCtsMessageRequest();
+        $message->setType(\Akaxin\Proto\Core\MsgType::GROUP_TEXT);
+        $message->settext($textMsg);
+
+        $requestMessage = new Akaxin\Proto\Plugin\HaiMessageProxyRequest();
+        $requestMessage->setProxyMsg($message);
+        $this->setSiteSessionId($siteSessionId);
+        $this->akaxinApiClient->request("/hai/message/proxy", $requestMessage);
+    }
+
     /**
      * 获取头像
      *

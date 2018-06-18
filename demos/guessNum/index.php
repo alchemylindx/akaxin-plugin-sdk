@@ -231,7 +231,7 @@ eot;
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" />
+                <link rel="stylesheet" href="{$this->pluginHttpDomain}/Public/css/bootstrap.min.css" />
                 {$this->cssForWebmsg}
             </head>
             <body style="background: #eee;">
@@ -246,8 +246,8 @@ eot;
                     $webCode .= '<div class="p-2 guess_num">';
                     if(isset($gameUserInfo[$startNum]['is_right']) && $gameUserInfo[$startNum]['is_right']>0 ) {
                         $webCode .= <<<eot
-                        <div class="zaly_border zaly-num-right-style " >
-                            <img src="{$this->pluginHttpDomain}/index.php?page_type=imageDownload&game_site_user_id={$gameSiteUserId}"
+                        <div class="zaly_border zaly-num-right-style blink" >
+                            <img class="blink" src="{$this->pluginHttpDomain}/index.php?page_type=imageDownload&game_site_user_id={$gameSiteUserId}"
                                 style="height:30px; width:30px;border-radius:50%; text-align: center;margin-top: 3px;"
                             />
                         </div>
@@ -275,16 +275,16 @@ eot;
         $height = 0;
         switch ($gameType) {
             case 4:
-                $height = 400;
+                $height = 128;
                 break;
             case 9:
-                $height = 600;
+                $height = 256;
                 break;
             case 16:
-                $height = 800;
+                $height = 450;
                 break;
             default:
-                $height = 800;
+                $height = 450;
         }
         if($hrefType == $this->u2Type) {
             $this->zalyHelper->setU2WebNoticeMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $webCode, $hrefUrl, $height);
@@ -343,7 +343,6 @@ eot;
                 break;
             case 16:
                 $text = "十六猜一";
-                // $webCode = '<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0"> <title>心有灵犀</title> </title> <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" /> <style> body, html {height: 100%; -webkit-tap-highlight-color: transparent; background-color: #F7CCE8; font-size: 10px; } .zaly-margin-16px{margin-top: 16px; } .zaly-btn, .zaly-btn:hover,.zaly-btn:active, .zaly-btn:focus, .zaly-btn:active:focus, .zaly-btn:active:hover{width:209px; height:46px; background:rgba(226,130,179,1); box-shadow:0px 8px 4px -8px rgba(242,234,165,1); border-radius:4px; border:4px solid rgba(188,83,131,1); } .zaly-btn-font{font-size:14px; font-family:PingFangSC-Regular; color:rgba(255,255,255,1); line-height:20px; margin-bottom: 10px; } </style> </head> <body ontouchstart=""> <div class="d-flex flex-column "> <div class="p-2 d-flex   zaly-margin-16px justify-content-center"> <label style="text-align: center;">我发起了一场心有灵犀：十六猜一</label> </div> <div class="p-2 d-flex justify-content-center"> <button type="button" class="btn zaly-btn zaly-btn-font">来猜我的神秘数字吧</button> </div> </div> </body> </html>';
                 break;
         }
         $webCode = <<<eot
@@ -421,21 +420,8 @@ eot;
      */
     public function sendFailMsg($chatSessionId, $siteSessionId, $siteUserId, $guessNum, $hrefType, $hrefUrl)
     {
-        $webCode = <<<EOT
-        <!DOCTYPE html><html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-                {$this->cssForWebmsg}
-            </head>
-            <body>
-                <div class="wrapper">
-                    <p>我猜是：{$guessNum}！猜错了！/(ㄒoㄒ)/~~ </p>
-                </div>
-            </body>
-        </html>
-EOT;
-        $this->setMsgByApiClient($chatSessionId, $siteSessionId, $siteUserId, $webCode, $hrefType, $hrefUrl, 40, 200);
+        $text = "我猜是：{$guessNum}！猜错了！/(ㄒoㄒ)/~~ ";
+        $this->setTextMsgByApiClient($chatSessionId, $siteUserId, $text, $hrefType);
     }
 
     /**
@@ -459,6 +445,15 @@ EOT;
             return;
         }
         $this->zalyHelper->setGroupWebMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $webCode, $hrefUrl, $height, $width);
+    }
+
+    public function setTextMsgByApiClient($chatSessionId, $siteUserId, $text, $hrefType)
+    {
+        if($hrefType == $this->u2Type) {
+            $this->zalyHelper->setU2TextMsgByApiClient($chatSessionId ,$siteUserId, $text);
+            return;
+        }
+        $this->zalyHelper->setGroupTextMsgByApiClient($chatSessionId ,$siteUserId, $text);
     }
 }
 

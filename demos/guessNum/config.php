@@ -3,10 +3,10 @@
 $conf = array(
 
     // 扩展服务器WEB地址，用以加载静态文件的根目录
-    "plugin_http_domain" => "http://192.168.3.5/akaxin-plugin/demos/guessNum/",
+    "plugin_http_domain" => "http://192.168.1.3/akaxin-plugin/demos/guessNum/",
 
     // 用户在客户端访问站点的地址
-    "site_address" => "192.168.3.5",
+    "site_address" => "192.168.1.3",
 
 
     // PluginApiServer
@@ -16,7 +16,7 @@ $conf = array(
     "plugin_api_port" => 8280,  // 对应启动服务器时的 -Dhttp.port 参数
 
 
-    "game_expire_time" => 60, // 过期时间，如果超过这个时间获胜者没有开局，则所有人均可开局。
+    "game_expire_time" => 30, // 过期时间，如果超过这个时间获胜者没有开局，则所有人均可开局。
 
 
     // 一定要设置此值！！！设置成一个随机字符串，比如：012f214526b489a18f2c1a1f3523a041
