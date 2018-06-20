@@ -15,20 +15,6 @@ body, html {
     animation-iteration-count: infinite;
 }
 
-@-webkit-keyframes blink_effect {
-    0%  {
-        background: #FFD700;
-    }
-
-    50% {
-        background: #FF6600;
-    }
-
-    100%  {
-        background: #FFD700;
-    }
-}
-
 @keyframes blink_effect {
     0%  {
         background: #FFD700;
