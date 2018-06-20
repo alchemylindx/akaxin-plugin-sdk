@@ -257,11 +257,10 @@ class ZalyHelper
 
         $message = new Akaxin\Proto\Site\ImCtsMessageRequest();
         $message->setType(\Akaxin\Proto\Core\MsgType::GROUP_TEXT);
-        $message->settext($textMsg);
+        $message->setGroupText($textMsg);
 
         $requestMessage = new Akaxin\Proto\Plugin\HaiMessageProxyRequest();
         $requestMessage->setProxyMsg($message);
-        $this->setSiteSessionId($siteSessionId);
         $this->akaxinApiClient->request("/hai/message/proxy", $requestMessage);
     }
 
