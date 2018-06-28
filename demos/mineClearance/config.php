@@ -21,7 +21,7 @@ $conf = array(
 
     // 一定要设置此值！！！设置成一个随机字符串，比如：012f214526b489a18f2c1a1f3523a041
     // 因为sqlite是个单体文件，要防止脱裤
-    "db_safe_prefix" => "_shaoye_5166",
+    "db_safe_prefix" => "shaoye_5166",
 );
 
 function getConf() {

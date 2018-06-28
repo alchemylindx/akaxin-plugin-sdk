@@ -8,6 +8,7 @@ var BLANK_NUM = GRID_TOTAL - BOMB_NUM;
 var I_BOMB = -1;
 var I_BLANK = 0;
 var I_NUMBER = 1;
+var timeCount = 0;
 function Game() {
     this.storage = $("span");
     var game = this;
@@ -18,11 +19,9 @@ function Game() {
     this.setBestTime(this.storage.get("best"));
     this.initCells();
     this.newGame();
-    console.log("ppp");
-    setInterval(function() {
-            game.updateTime()
-    },
-    100);
+    console.log("new  game");
+    var time = setInterval(function(){game.updateTime()},100);
+    game.updateTime();
 }
 Game.prototype.initCells = function() {
     var container = $(".cell-container");
@@ -41,6 +40,7 @@ Game.prototype.newGame = function() {
 
     this.startTime = new Date().getTime();
     this.clickNum = 0;
+
     this.randomCellData();
 };
 Game.prototype.randomCellData = function() {
@@ -113,8 +113,14 @@ Game.prototype.showEnding = function(state) {
     title.css("background-color", isWin ? "#5cb85c": "#f0ad4e");
     var btn = ending.find(".retry");
     btn.attr("class", "retry btn btn-" + (isWin ? "success": "warning"));
+
+    var ending = $(".ending");
+    var shareGame = ending.find(".share_game");
+    shareGame.prop("disabled", null);
+
+    var gameResult = ending.find(".game-result");
+    gameResult.attr('data-flat', (isWin ? "success" : "faile"));
     ending.show();
-	
 };
 Game.prototype.clearEnding = function() {
     $(".ending").hide()
@@ -165,21 +171,21 @@ Game.prototype.setBestTime = function(best) {
     $(".best>span").text(best == 0 ? "--": time.toFixed(1))
 };
 Game.prototype.updateTime = function() {
-
+    console.log("new  game updateTime");
     if (this.state != STATE_PLAY) {
-
         return
     }
     console.log("state ==" + this.state);
-
     var timeDiv = $(".current>span");
-    var time = new Date().getTime();
-    time = (time - this.startTime) / 1000;
-    if (time >= 99.9) {
-        time = 99.9;
-        this.loseGame()
-    }
-    timeDiv.text(time.toFixed(1))
+    timeDiv.text("0.3");
+
+    // var time = new Date().getTime();
+    // time = (time - this.startTime) / 1000;
+    // if (time >= 99.9) {
+    //     time = 99.9;
+    //     this.loseGame()
+    // }
+    // timeDiv.text(time.toFixed(1))
 };
 function Cell(div, x, y) {
     this.x = parseInt(x);

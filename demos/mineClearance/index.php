@@ -7,7 +7,7 @@
  */
 require_once(__DIR__ . "/../../sdk-php/AkaxinPluginApiClient.php");
 require_once(__DIR__ . "/config.php");
-//require_once(__DIR__ . "/dbHelper.php");
+require_once(__DIR__ . "/dbHelper.php");
 require_once(__DIR__ . "/zalyHelper.php");
 
 class MineClearance
@@ -32,7 +32,7 @@ class MineClearance
     public $pluginId;
     public function __construct()
     {
-//        $this->dbHelper   = DBHelper::getInstance();
+        $this->dbHelper   = DBHelper::getInstance();
         $this->zalyHelper = ZalyHelper::getInstance();
         $config = getConf();
         $this->pluginId = $config['plugin_id'];
@@ -101,18 +101,32 @@ class MineClearance
      * @param $hrefType
      * @param $time
      */
-    public function shareGameToChat($siteSessionId, $chatSessionId, $hrefType, $time)
+    public function shareGameToChat($siteSessionId, $chatSessionId, $hrefType, $time, $gameType)
     {
         $userProfile = $this->zalyHelper->getSiteUserProfile($siteSessionId);
         if(!$userProfile) {
             return json_encode(['error_code' => 'fail', 'error_msg' => '请稍候再试！']);
         }
         $siteUserId    = $userProfile->getSiteUserId();
-
+        $siteUserPhoto = $userProfile->getUserPhoto();
         $hrefUrl = $this->getHrefUrl($chatSessionId, $siteUserId, $hrefType);
+        switch ($gameType) {
+            case "fail":
+                $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId, "fail", $time);
+                $this->sendPluginFailMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $time);
+                break;
+            case "success":
+                $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId, "success", $time);
+                $this->sendPluginSuccessMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $time);
+                break;
+            default:
+                $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId, "unkonw", $time);
+                $this->sendPluginMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $time);
 
-        $this->sendPluginFailMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $time);
+        }
     }
+
+
 
     /**
      * 得到hrefUrl
@@ -132,6 +146,59 @@ class MineClearance
             $hrefUrl = str_replace(["SiteAddress", "chatSessionId", "PluginId"], [$this->siteAddress, $chatSessionId, $this->pluginId], $this->groupHrefUrl);
         }
         return $hrefUrl;
+    }
+
+
+    /**
+     * @param $chatSessionId
+     * @param $siteSessionId
+     * @param $gameNum
+     * @param $hrefType
+     *
+     * @author 尹少爷 2018.6.11
+     */
+    public function sendPluginMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $text)
+    {
+        $webCode = <<<eot
+        <!DOCTYPE html><html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+            <style>
+                .wrapper {
+                    height: 100%;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .zaly-btn, .zaly-btn:hover,.zaly-btn:active, .zaly-btn:focus, .zaly-btn:active:focus, .zaly-btn:active:hover {
+                    width:209px; height:46px;
+                    background:rgba(226,130,179,1);
+                    box-shadow:0px 8px 4px -8px rgba(242,234,165,1);
+                    border-radius:4px; border:4px solid rgba(188,83,131,1);
+                }
+                .zaly-btn-font{
+                    font-size:12px; font-family:PingFangSC-Regular;
+                    color:rgba(255,255,255,1);
+                    line-height:20px;
+                }
+
+            </style>
+        </head>
+        <body>
+        <div class="wrapper">
+            <div>
+                <div style="text-align: center; margin: 16px auto 10px auto; color:rgba(188,83,131,1); font-weight: bold;">
+                   前方发现地雷，请保护自己。
+                </div>
+                <div>
+                    <button type="button" class="btn zaly-btn zaly-btn-font">来一起加入挑战吧!</button>
+                </div>
+            </div>
+        </div></body></html>
+eot;
+        $this->setMsgByApiClient($chatSessionId, $siteSessionId, $siteUserId, $webCode, $hrefType, $hrefUrl, 120, 300);
     }
 
     /**
@@ -185,7 +252,57 @@ class MineClearance
 eot;
         $this->setMsgByApiClient($chatSessionId, $siteSessionId, $siteUserId, $webCode, $hrefType, $hrefUrl, 120, 300);
     }
+    /**
+     * @param $chatSessionId
+     * @param $siteSessionId
+     * @param $gameNum
+     * @param $hrefType
+     *
+     * @author 尹少爷 2018.6.11
+     */
+    public function sendPluginSuccessMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $text)
+    {
+        $webCode = <<<eot
+        <!DOCTYPE html><html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+            <style>
+                .wrapper {
+                    height: 100%;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .zaly-btn, .zaly-btn:hover,.zaly-btn:active, .zaly-btn:focus, .zaly-btn:active:focus, .zaly-btn:active:hover {
+                    width:209px; height:46px;
+                    background:rgba(226,130,179,1);
+                    box-shadow:0px 8px 4px -8px rgba(242,234,165,1);
+                    border-radius:4px; border:4px solid rgba(188,83,131,1);
+                }
+                .zaly-btn-font{
+                    font-size:12px; font-family:PingFangSC-Regular;
+                    color:rgba(255,255,255,1);
+                    line-height:20px;
+                }
 
+            </style>
+        </head>
+        <body>
+        <div class="wrapper">
+            <div>
+                <div style="text-align: center; margin: 16px auto 10px auto; color:rgba(188,83,131,1); font-weight: bold;">
+                    傲娇的完成扫雷任务，用时{$text}！
+                </div>
+                <div>
+                    <button type="button" class="btn zaly-btn zaly-btn-font">来一起加入挑战吧!</button>
+                </div>
+            </div>
+        </div></body></html>
+eot;
+        $this->setMsgByApiClient($chatSessionId, $siteSessionId, $siteUserId, $webCode, $hrefType, $hrefUrl, 120, 300);
+    }
 
     /**
      * plugin 发送web消息
@@ -224,8 +341,10 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
     $chatSessionId = isset($_POST['chat_session_id']) ? $_POST['chat_session_id'] :"";
     $siteSessionId = $urlParams['site_session_id'];
     $time = isset($_POST['use_time']) ? $_POST['use_time']:"";
-}
+    $gameType = isset($_POST['game_type'])?$_POST['game_type'] : "unknow";
+    error_log(" time ==".$time);
 
+}
 switch ($pageType) {
     case "first":
         $urlParams['http_domain'] = $mineClearance->pluginHttpDomain;
@@ -235,6 +354,6 @@ switch ($pageType) {
         break;
 
     case "share_fail":
-        $mineClearance->shareGameToChat($siteSessionId, $chatSessionId, $hrefType, $time);
+        $mineClearance->shareGameToChat($siteSessionId, $chatSessionId, $hrefType, $time, $gameType);
         break;
 }

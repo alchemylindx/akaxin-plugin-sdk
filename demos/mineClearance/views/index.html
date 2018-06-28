@@ -28,7 +28,7 @@
   <div class="engine" >
       <div class="notice"></div>
       <div class="status">
-          <div class="current panel ">当前用时 <span class="use_time">0.00</span> s</div>
+          <div class="current panel ">当前用时 <span class="use_time">0.3</span> s</div>
           <!--<div class="best panel">最快用时<span>0.00</span> s</div>-->
           <input type="hidden" class="chat_session_id" data="<?php echo $chat_session_id;?>">
           <input type="hidden" class="href_type" data="<?php echo $href_type;?>">
@@ -38,9 +38,10 @@
         <div class="cell-container"></div>
         <div class="ending">
           <p></p>
-          <div class="btns">  
+          <div class="btns">
             <button class="retry btn">再来一局</button>
-            <button class="more btn btn-warning share_game" >分享挑战</button>
+            <button class="more btn btn-warning  share_game " >分享挑战</button>
+              <input type="hidden" class="game-result" data-flag=""/>
           </div>
         </div>
       </div>
@@ -53,19 +54,37 @@
 
   <script language=javascript>
 		$(document).on("click", ".share_game", function() {
+            $(this).attr("disabled", true);
             var hrefType = $('.href_type').attr('data');
             var useTime  = $("span").text();
             var chatSesssionId = $('.chat_session_id').attr('data');
+            var gameResult = $(".game-result").attr("data-flag");
+
             $.ajax({
                 method: "POST",
                 url:"<?php echo $http_domain;?>/index.php",
-                data: { page_type: "share_fail", chat_session_id : chatSesssionId , href_type:hrefType, time:useTime},
+                data: { page_type: "share_fail", chat_session_id : chatSesssionId , href_type:hrefType, use_time:useTime+"s" , game_type:gameResult},
                 success:function (data) {
-                    Zaly.tip("success");
+
                 },
                 fail:function (data) {
-                    Zaly.tip("failed");
+                }
+            });
+            return false;
+        });
 
+        $(document).on("click", ".retry", function() {
+            var hrefType = $('.href_type').attr('data');
+            var useTime  = $("span").text();
+            var chatSesssionId = $('.chat_session_id').attr('data');
+            var gameResult = $(".game-result").attr("data-flag");
+            $.ajax({
+                method: "POST",
+                url:"<?php echo $http_domain;?>/index.php",
+                data: { page_type: "record", chat_session_id : chatSesssionId , href_type:hrefType, use_time:useTime+"s", game_type:gameResult},
+                success:function (data) {
+                },
+                fail:function (data) {
                 }
             });
             return false;
