@@ -143,8 +143,6 @@ $poke = Poke::getInstance();
 $pageType    = isset($_GET['page_type']) ? $_GET['page_type'] : "first";
 $httpReferer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 $urlParams = $poke->parseUrl($httpReferer);
-error_log("url params ==" . json_encode($urlParams));
-error_log( "method ==" .$_SERVER['REQUEST_METHOD']);
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
     $pageType    = isset($_POST['page_type']) ? $_POST['page_type'] : "share_fail";
     $hrefType    = isset($_POST['href_type']) ? $_POST['href_type'] : "";

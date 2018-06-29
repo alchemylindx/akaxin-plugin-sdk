@@ -105,7 +105,7 @@ POP.gameOver = function() {
 };
 POP.isEndGame = false;
 POP.againGame = function(){
-	/*POP.isEndGame = false;
+	POP.isEndGame = false;
 	POP.score.taps =
 	POP.score.burst =
 	POP.score.escapees =
@@ -121,8 +121,7 @@ POP.againGame = function(){
 	POP.gameStart = null;
 
 	POP.inputBox.style.display = 'none';
-	POP.state = 'splash';*/
-	location.reload();
+	POP.state = 'splash';
 }
 
 POP.hiScores = function() {
