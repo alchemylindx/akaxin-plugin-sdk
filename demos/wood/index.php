@@ -101,7 +101,7 @@ class Wood
      * @param $hrefType
      * @param $time
      */
-    public function shareGameToChat($siteSessionId, $chatSessionId, $hrefType, $time, $gameType)
+    public function shareGameToChat($siteSessionId, $chatSessionId, $hrefType, $gameResult)
     {
         $userProfile = $this->zalyHelper->getSiteUserProfile($siteSessionId);
         if(!$userProfile) {
@@ -109,23 +109,25 @@ class Wood
         }
         $siteUserId    = $userProfile->getSiteUserId();
         $siteUserPhoto = $userProfile->getUserPhoto();
-        $hrefUrl = $this->getHrefUrl($chatSessionId, $siteUserId, $hrefType);
-        switch ($gameType) {
-            case "fail":
-                $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId, "fail", $time);
-                $this->sendPluginFailMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $time);
-                break;
-            case "success":
-                $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId, "success", $time);
-                $this->sendPluginSuccessMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $time);
-                break;
-            default:
-                $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId, "unkonw", $time);
-                $this->sendPluginMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $time);
-
-        }
+        $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId,  $gameResult);
+        $this->setTextMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $gameResult, $hrefType);
     }
-
+    /**
+     * @param $siteSessionId
+     * @param $chatSessionId
+     * @param $hrefType
+     * @param $time
+     */
+    public function recordGame($siteSessionId, $chatSessionId, $hrefType, $gameResult)
+    {
+        $userProfile = $this->zalyHelper->getSiteUserProfile($siteSessionId);
+        if(!$userProfile) {
+            return json_encode(['error_code' => 'fail', 'error_msg' => '请稍候再试！']);
+        }
+        $siteUserId    = $userProfile->getSiteUserId();
+        $siteUserPhoto = $userProfile->getUserPhoto();
+        $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId,  $gameResult);
+    }
     /**
      * 得到hrefUrl
      *
@@ -148,120 +150,26 @@ class Wood
 
 
     /**
+     * plugin 发送web消息
+     *
      * @param $chatSessionId
      * @param $siteSessionId
-     * @param $gameNum
+     * @param $siteUserId
+     * @param $webCode
      * @param $hrefType
+     * @param $hrefUrl
+     * @param int $height
+     * @param int $width
      *
      * @author 尹少爷 2018.6.11
      */
-    public function sendPluginMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $text)
+    public function setTextMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $text, $hrefType)
     {
-        $webCode = <<<eot
-        <!DOCTYPE html><html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-            <style>
-                .wrapper {
-                    height: 100%;
-                    width: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                .zaly-btn, .zaly-btn:hover,.zaly-btn:active, .zaly-btn:focus, .zaly-btn:active:focus, .zaly-btn:active:hover {
-                    width:209px; height:46px;
-                    background:rgba(226,130,179,1);
-                    box-shadow:0px 8px 4px -8px rgba(242,234,165,1);
-                    border-radius:4px; border:4px solid rgba(188,83,131,1);
-                }
-                .zaly-btn-font{
-                    font-size:12px; font-family:PingFangSC-Regular;
-                    color:rgba(255,255,255,1);
-                    line-height:20px;
-                }
-
-            </style>
-        </head>
-        <body>
-        <div class="wrapper">
-            <div>
-                <div style="text-align: center; margin: 16px auto 10px auto; color:rgba(188,83,131,1); font-weight: bold;">
-                   前方发现地雷，请保护自己。
-                </div>
-                <div>
-                    <button type="button" class="btn zaly-btn zaly-btn-font">来一起加入挑战吧!</button>
-                </div>
-            </div>
-        </div></body></html>
-eot;
-        $this->setMsgByApiClient($chatSessionId, $siteSessionId, $siteUserId, $webCode, $hrefType, $hrefUrl, 120, 300);
-    }
-
-    /**
-     * @param $chatSessionId
-     * @param $siteSessionId
-     * @param $gameNum
-     * @param $hrefType
-     *
-     * @author 尹少爷 2018.6.11
-     */
-    public function sendPluginFailMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $text)
-    {
-
-        $this->setMsgByApiClient($chatSessionId, $siteSessionId, $siteUserId, $webCode, $hrefType, $hrefUrl, 120, 300);
-    }
-    /**
-     * @param $chatSessionId
-     * @param $siteSessionId
-     * @param $gameNum
-     * @param $hrefType
-     *
-     * @author 尹少爷 2018.6.11
-     */
-    public function sendPluginSuccessMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $text)
-    {
-        $webCode = <<<eot
-        <!DOCTYPE html><html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-            <style>
-                .wrapper {
-                    height: 100%;
-                    width: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                .zaly-btn, .zaly-btn:hover,.zaly-btn:active, .zaly-btn:focus, .zaly-btn:active:focus, .zaly-btn:active:hover {
-                    width:209px; height:46px;
-                    background:rgba(226,130,179,1);
-                    box-shadow:0px 8px 4px -8px rgba(242,234,165,1);
-                    border-radius:4px; border:4px solid rgba(188,83,131,1);
-                }
-                .zaly-btn-font{
-                    font-size:12px; font-family:PingFangSC-Regular;
-                    color:rgba(255,255,255,1);
-                    line-height:20px;
-                }
-
-            </style>
-        </head>
-        <body>
-        <div class="wrapper">
-            <div>
-                <div style="text-align: center; margin: 16px auto 10px auto; color:rgba(188,83,131,1); font-weight: bold;">
-                    傲娇的完成扫雷任务，用时{$text}！
-                </div>
-                <div>
-                    <button type="button" class="btn zaly-btn zaly-btn-font">来一起加入挑战吧!</button>
-                </div>
-            </div>
-        </div></body></html>
-eot;
-        $this->setMsgByApiClient($chatSessionId, $siteSessionId, $siteUserId, $webCode, $hrefType, $hrefUrl, 120, 300);
+        if($hrefType == $this->u2Type) {
+            $this->zalyHelper->sendU2TextMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $text );
+            return;
+        }
+        $this->zalyHelper->sendGroupTextMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $text);
     }
 
     /**
@@ -295,13 +203,14 @@ $httpReferer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 $urlParams = $wood->parseUrl($httpReferer);
 
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
-    $pageType  = isset($_POST['page_type']) ? $_POST['page_type'] : "share_fail";
+    $pageType  = isset($_POST['page_type']) ? $_POST['page_type'] : "share_game";
     $hrefType  = isset($_POST['href_type']) ? $_POST['href_type'] : "";
     $chatSessionId = isset($_POST['chat_session_id']) ? $_POST['chat_session_id'] :"";
     $siteSessionId = $urlParams['site_session_id'];
-    $time = isset($_POST['use_time']) ? $_POST['use_time']:"";
-    $gameType = isset($_POST['game_type'])?$_POST['game_type'] : "unknow";
+    $gameResult = isset($_POST['game_result'])?$_POST['game_result'] : "0";
 }
+error_log("game result  page type ". $pageType);
+
 switch ($pageType) {
     case "first":
         $urlParams['http_domain'] = $wood->pluginHttpDomain;
@@ -310,7 +219,10 @@ switch ($pageType) {
         echo $wood->render("index", $urlParams);
         break;
 
-    case "share_fail":
-        $wood->shareGameToChat($siteSessionId, $chatSessionId, $hrefType, $time, $gameType);
+    case "share_game":
+        $wood->shareGameToChat($siteSessionId, $chatSessionId, $hrefType, $gameResult);
+        break;
+    case "record_game":
+        $wood->recordGame($siteSessionId, $chatSessionId, $hrefType, $gameResult);
         break;
 }

@@ -25,7 +25,6 @@
  var dnd=0;
 
  function firstinit() {
-     console.log("ppp");
   document.body.addEventListener("touchmove", function(e) {
           e.preventDefault();
   }, false);
@@ -36,8 +35,8 @@
 
   theirbest=getCookie('stack_bestscore');
   if(theirbest == '') {theirbest=0;}
-     var imgUrl = "http://192.168.3.43:5188/public/img/";
-
+     var httpDomain = document.getElementById("http_domain").getAttribute("data");
+     var imgUrl = httpDomain+"/public/img/";
      document.getElementById('yourbest').innerHTML=theirbest;
      imgpreload(new Array(imgUrl+'/dropshadow.png',imgUrl+'/11.png',imgUrl+'/12.png',imgUrl+'/13.png',imgUrl+'/21.png',imgUrl+'/22.png',imgUrl+'/23.png',imgUrl+'/31.png',imgUrl+'/32.png',imgUrl+'/33.png',imgUrl+'/41.png',imgUrl+'/42.png',imgUrl+'/43.png'));
   document.body.addEventListener("touchmove", function(e) {
@@ -55,8 +54,8 @@
   	tmp.onmousedown=handleclick;
   	tmp.onclick = function() {return false;}
   }
-     var imgUrl = "http://192.168.3.43:5188/public/img";
-
+  var httpDomain = document.getElementById("http_domain").getAttribute("data");
+     var imgUrl = httpDomain+"/public/img/";
      tmp.style.backgroundImage='url('+imgUrl+'/stackthelog.png)';
 tmp.style.backgroundPosition='center center';
 tmp.style.backgroundRepeat='no-repeat';
@@ -69,7 +68,7 @@ tmp.style.padding='17px 11px 0 11px';
 
   tmp=document.createElement('div')
   tmp.id='st_scrollarea';
-     var imgUrl = "http://192.168.3.43:5188/public/img";
+     var imgUrl = httpDomain+"/public/img/";
 
      tmp.style.backgroundImage='url('+imgUrl+'/bg1250.png)';
   tmp.style.backgroundPosition='bottom center';
@@ -79,8 +78,7 @@ tmp.style.padding='17px 11px 0 11px';
   $('st_outerarea').appendChild(tmp);
 
   tmp=document.createElement('div');
-     var imgUrl = "http://192.168.3.43:5188/public/img";
-
+     var imgUrl = httpDomain+"/public/img/";
      tmp.style.backgroundImage='url('+imgUrl+'/fuhatul.png)';
   tmp.style.position='absolute';
   tmp.style.width='320px';
@@ -90,8 +88,7 @@ tmp.style.padding='17px 11px 0 11px';
   $('st_scrollarea').appendChild(tmp);
 
   tmp=document.createElement('div');
-     var imgUrl = "http://192.168.3.43:5188/public/img";
-
+     var imgUrl = httpDomain+"/public/img/";
      tmp.style.backgroundImage='url('+imgUrl+'/fuelol.png)';
   tmp.style.position='absolute';
   tmp.style.width='311px';
@@ -210,6 +207,8 @@ function handleclick() {
 function addshadow() {
      console.log("addshadow")
     tmp=document.createElement('img');
+    var httpDomain = document.getElementById("http_domain").getAttribute("data");
+    var imgUrl = httpDomain+"/public/img/";
     tmp.src=imgUrl+'/dropshadow.png';
     tmp.id='shd_'+sts;
   tmp.style.zIndex='15';
@@ -265,8 +264,8 @@ function cutaronk(crid,crtype,crstart,crstays,crfrom) {
 }
 
 function showaronk(srid,srtype,srstart,srsize) {
-    var imgUrl = "http://192.168.3.43:5188/public/img/";
-
+    var httpDomain = document.getElementById("http_domain").getAttribute("data");
+    var imgUrl = httpDomain+"/public/img/";
     srt=imgUrl+srtype
  tmp=document.createElement('div');
  tmp.style.position='absolute';
@@ -305,10 +304,13 @@ function gameover() {
  if(stscore>theirbest) {
   setCookie('stack_bestscore',stscore);
   document.getElementById('yourbest').innerHTML=stscore;
+
+  document.getElementById("game_result").setAttribute("data", stscore);
+
   theirbest=stscore;
-  ialert('<h1>游戏结束: '+stscore+'分</h1>厉害，你又破纪录了','restartgame();');
+     iShareGame('<h1>游戏结束: '+stscore+'分</h1>厉害，你又破纪录了','restartgame();');
  } else {
-  ialert('<h1>游戏结束: '+stscore+'</h1>再来一次?','restartgame();');
+     iShareGame('<h1>游戏结束: '+stscore+'</h1>再来一次?','restartgame();');
  }
  //urchinTracker('/stack/gamesplayed/');
  return false;
@@ -356,63 +358,4 @@ function resumegame() {
 var tit="0";
 tit=stscore;
 var tite="";
-	var DFW = {
-		appId: "",
-		TLImg: "http://g.lanrenmb.com/games/duimutou/icon.png",
-		url: "http://g.lanrenmb.com/games/duimutou/",
-		title: "堆木头，简单的不得了，好玩的停不下",
-		desc: "玩法简单，但是玩的是技巧，反应，没有最高只有更高，来挑战下--关注懒人模板:lanrenmb"
-	};
-	var onBridgeReady = function(){
-		WeixinJSBridge.on('menu:share:appmessage', function(argv){
-			if(tit>500){tite=DFW.title + " 我的分数是"+tit+"分，求超越！";}else{tite=DFW.title;};
-			WeixinJSBridge.invoke('sendAppMessage', {
-				"appid": DFW.appId,
-				"img_url": DFW.TLImg,
-				"img_width": "120",
-				"img_height": "120",
-				"link": DFW.url ,
-				"title": tite ,
-				"desc": DFW.desc
-			});
-		});
-		WeixinJSBridge.on('menu:share:timeline', function(argv){
-			if(tit>500){tite=DFW.title + " 我的分数是"+tit+"分，求超越！";}else{tite=DFW.title;};
-			WeixinJSBridge.invoke('shareTimeline', {
-				"appid": DFW.appId,
-				"img_url":DFW.TLImg,
-				"img_width": "120",
-				"img_height": "120",
-				"link": DFW.url ,
-				"title": tite ,
-				"desc": DFW.desc
-			});
-		});
-	};
-	if(document.addEventListener){
-		document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-	}else if(document.attachEvent){
-		document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-		document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-	}
 
-//xinli   
-/*
-updateShare(stscore);
-function updateShare(stscore) {
-	imgUrl = 'http://g.lanrenmb.com/games/duimutou/i/icon.png';
-	lineLink = 'http://g.lanrenmb.com/games/duimutou';
-	descContent = "玩法简单，但是玩的是技巧，反应，没有最高只有更高，来挑战下！";
-	updateShareScore(stscore);
-	appid = '';
-}
-
-function updateShareScore(stscore) {
-	if(stscore > 0) {
-		shareTitle = "我在《堆木头》得了" + stscore + "分，智力眼力大考验，求超越！";
-	}
-	else{
-		shareTitle = "智力眼力挑战游戏堆木头，你能堆多高？";
-	}
-}*/
-//xinli001

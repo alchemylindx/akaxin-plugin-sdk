@@ -24,8 +24,8 @@ console.log("ppp");
 
  function imgpreload(ims) {
   myims=new Array();
-     var imgUrl = "http://192.168.3.43:5188/public/img/";
-
+     var httpDomain = document.getElementById("http_domain").getAttribute("data");
+     var imgUrl = httpDomain+"/public/img/";
      ims.push(imgUrl+'/b_yes.png');
   ims.push(imgUrl+'/b_no.png');
   ims.push(imgUrl+'/b_okay.png');
@@ -54,9 +54,11 @@ console.log("ppp");
 
       function imgpreload(ims) {
           myims=new Array();
-          ims.push('./i/b_yes.png');
-          ims.push('./i/b_no.png');
-          ims.push('./i/b_okay.png');
+          var httpDomain = document.getElementById("http_domain").getAttribute("data");
+          var imgUrl = httpDomain+"/public/img/";
+          ims.push(imgUrl+'/b_yes.png');
+          ims.push(imgUrl+'/b_no.png');
+          ims.push(imgUrl+'/b_okay.png');
           for(i in ims) {
               myims[i]=new Image();
               myims[i].src=ims[i];
@@ -103,13 +105,18 @@ console.log("ppp");
           resumegame();
       }
 
+
       function ialert(iquestion,idoit) {
-          document.getElementById('alertbox_content').innerHTML=iquestion+'<br style="clear:both" /><br /><a href="#" onclick="idismiss();eval(\''+idoit+'\'); return false;" ontouchstart="idismiss();eval(\''+idoit+'\'); return false;"><img src="./i/b_okay.png" alt="确定" /></a>';
+          var httpDomain = document.getElementById("http_domain").getAttribute("data");
+          var imgUrl = httpDomain+"/public/img/";
+          document.getElementById('alertbox_content').innerHTML=iquestion+'<br style="clear:both" /><br /><a href="#" onclick="idismiss();eval(\''+idoit+'\'); return false;" ontouchstart="idismiss();eval(\''+idoit+'\'); return false;"><img src='+imgUrl+'/b_okay.png alt="确定" /></a>';
           document.getElementById('alertbox').style.display='block';
       }
 
       function iconfirm(iquestion,idoit) {
-          document.getElementById('alertbox_content').innerHTML=iquestion+'<br style="clear:both" /><br /><a href="#" ontouchstart="idismiss();eval(\''+idoit+'\'); return false;" onclick="idismiss();eval(\''+idoit+'\'); return false;"><img src="./i/b_yes.png" alt="Yes" /></a><a href="#" ontouchstart="idismiss(); return false;" onclick="idismiss(); return false;"><img src="./i/b_no.png" alt="No" /></a>';
+          var httpDomain = document.getElementById("http_domain").getAttribute("data");
+          var imgUrl = httpDomain+"/public/img/";
+          document.getElementById('alertbox_content').innerHTML=iquestion+'<br style="clear:both" /><br /><a href="#" ontouchstart="idismiss();eval(\''+idoit+'\'); return false;" onclick="idismiss();eval(\''+idoit+'\'); return false;"><img src=imgUrl+"/b_yes.png" alt="Yes" /></a><a href="#" ontouchstart="idismiss(); return false;" onclick="idismiss(); return false;"><img src="./i/b_no.png" alt="No" /></a>';
           document.getElementById('alertbox').style.display='block';
       }
 
@@ -182,26 +189,95 @@ console.log("ppp");
    return false;
   }
 
-  function idismiss() {
-   document.getElementById('alertbox').style.display='none';
-   resumegame();
+  function createXHR(){
+     if(window.XMLHttpRequest){////iE7+ fairefox, opera, chrome, safari
+        return new XMLHttpRequest();
+     }else if(window.ActiveXObject) { ////ie6-
+        return null;
+     }
   }
 
-  function ialert(iquestion,idoit) {
-      var imgUrl = "http://192.168.3.43:5188/public/img/";
-
-      document.getElementById('alertbox_content').innerHTML=iquestion+'<br style="clear:both" /><br /><a href="#" onclick="idismiss();eval(\''+idoit+'\'); return false;" ontouchstart="idismiss();eval(\''+idoit+'\'); return false;"><img src='+ imgUrl +'/b_okay.png alt="确定" /></a>';
-   document.getElementById('alertbox').style.display='block';
+  function iShare() {
+      // document.getElementById('alertbox').style.display='none';
+      // resumegame();
+      console.log("iShare");
+      sendDataToServer("share_game");
   }
-    
-  function iconfirm(iquestion,idoit) {
-      var imgUrl = "http://192.168.3.43:5188/public/img/";
 
-      document.getElementById('alertbox_content').innerHTML=iquestion+'<br style="clear:both" /><br /><a href="#" ontouchstart="idismiss();eval(\''+idoit+'\'); return false;" onclick="idismiss();eval(\''+idoit+'\'); return false;"><img src='+ imgUrl +'/b_yes.png" alt="Yes" /></a><a href="#" ontouchstart="idismiss(); return false;" onclick="idismiss(); return false;"><img src='+ imgUrl +'/b_no.png" alt="No" /></a>';
-   document.getElementById('alertbox').style.display='block';
+  function sendDataToServer(pageType){
+      var hrefType = document.getElementById("href_type").getAttribute('data');
+      var gameResult = document.getElementById("game_result").getAttribute("data");
+      var chatSessionId = document.getElementById("chat_session_id").getAttribute('data');
+      var httpDomain = document.getElementById("http_domain").getAttribute("data");
+
+      if (window.XMLHttpRequest) {////iE7+ fairefox, opera, chrome, safari
+          console.log("XMLHttpRequest");
+
+          var url = httpDomain + "/index.php";
+          var data = {
+              page_type: pageType,
+              chat_session_id: chatSessionId,
+              href_type: hrefType,
+              game_result: gameResult
+          };
+
+          var xmlHttp = new XMLHttpRequest();
+          xmlHttp.open("post", url, true);///异步请求
+          xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          xmlHttp.send(JSON.stringify(data));
+          var response = xmlHttp.responseText;
+          xmlHttp.onreadystatechange = function () {
+              if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                  console.log("success");
+              }
+          }
+          ////readyState
+          // 0	UNSENT	Client has been created. open() not called yet.
+          // 1	OPENED	open() has been called.
+          // 2	HEADERS_RECEIVED	send() has been called, and headers and status are available.
+          // 3	LOADING	Downloading; responseText holds partial data.
+          // 4	DONE	The operation is complete.
+      }
   }
-  
- function getCookie(Name) {
+
+
+function iNewGame() {
+    document.getElementById('alertbox').style.display='none';
+    resumegame();
+}
+
+function idismiss() {
+    document.getElementById('alertbox').style.display='none';
+    sendDataToServer("record_game");
+    resumegame();
+}
+function ialert(iquestion,idoit) {
+    var httpDomain = document.getElementById("http_domain").getAttribute("data");
+    var imgUrl = httpDomain+"/public/img/";
+    document.getElementById('alertbox_content').innerHTML=iquestion+'<br style="clear:both" /><br /><a href="#" onclick="idismiss();eval(\''+idoit+'\'); return false;" ontouchstart="idismiss();eval(\''+idoit+'\'); return false;"><img src='+imgUrl+'/b_okay.png alt="确定" /></a>';
+    document.getElementById('alertbox').style.display='block';
+}
+
+
+function iconfirm(iquestion,idoit) {
+    var httpDomain = document.getElementById("http_domain").getAttribute("data");
+    var imgUrl = httpDomain+"/public/img/";
+    document.getElementById('alertbox_content').innerHTML=iquestion+'<br style="clear:both" /><br /><a href="#" ontouchstart="idismiss();eval(\''+idoit+'\'); return false;" onclick="idismiss();eval(\''+idoit+'\'); return false;"><img src=\'+imgUrl+\'/b_yes.png" alt="Yes" /></a><a href="#" ontouchstart="idismiss(); return false;" onclick="idismiss(); return false;"><img src=\'+imgUrl+\'/b_no.png" alt="No" /></a>';
+    document.getElementById('alertbox').style.display='block';
+}
+
+function iShareGame(iquestion,idoit) {
+    var httpDomain = document.getElementById("http_domain").getAttribute("data");
+    var imgUrl = httpDomain+"/public/img/";
+    // document.getElementById('alertbox_content').innerHTML=iquestion+'<br style="clear:both" /><br /><a href="#" ontouchstart="idismiss();eval(\''+idoit+'\'); return false;" onclick="idismiss();eval(\''+idoit+'\'); return false;"><img src=\'+imgUrl+\'/b_yes.png" alt="Yes" /></a><a href="#" ontouchstart="idismiss(); return false;" onclick="idismiss(); return false;"><img src=\'+imgUrl+\'/b_no.png" alt="No" /></a>';
+    document.getElementById('alertbox_content').innerHTML=iquestion+'<br style="clear:both" /><br /><button  ontouchstart="idismiss();eval(\''+idoit+'\'); return false;" onclick="idismiss();eval(\''+idoit+'\'); return false;" >再来一局</button><button href="#" ontouchstart="iShare(); return false;" onclick="iShare(); return false;" >分享战绩</button>';
+
+    document.getElementById('alertbox').style.display='block';
+}
+
+
+
+function getCookie(Name) {
   var search = Name + "="
   if (document.cookie.length > 0) {
    offset = document.cookie.indexOf(search)

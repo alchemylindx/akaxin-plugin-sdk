@@ -5,9 +5,9 @@
  <link rel="apple-touch-icon-precomposed" href="icon.png"/>
  <meta name="apple-mobile-web-app-capable" content="yes" />
  <link rel="apple-touch-icon-precomposed" href="<?php echo $http_domain;?>/public/img/icon.png"/>
- <link rel="apple-touch-startup-image" href="<?php echo $http_domain;?>/public/img//loader.png">
+ <link rel="apple-touch-startup-image" href="<?php echo $http_domain;?>/public/imgs/loader.png">
  <meta name="description" content="堆木头游戏，简单好玩的小游戏，尽可能的精确对齐木头，堆木头达到最高，当你感觉木头和下面的对齐时，按下按钮放木头" />
- <title>堆木头 反应速度测试小游戏--懒人模板</title>
+ <title>堆木头</title>
  <style type="text/css">
   body { font-family: helvetica, arial; background-color: #000000; color: #a3b3c3; border:0; padding:0; font-size:90%; overflow: hidden;
    width: 320px;
@@ -74,6 +74,9 @@
    <div style="width:320px;height:316px; overflow:hidden; position: relative;" id="st_outerarea">
    </div>
    <input type="hidden" id="http_domain" data="<?php echo $http_domain;?>">
+   <input type="hidden" id="chat_session_id" data="<?php echo $chat_session_id;?>">
+   <input type="hidden" id="href_type" data="<?php echo $href_type;?>">
+   <input type="hidden" id="game_result" data="">
 
   </div>
   <div id="ibox_highscore" class="iboxcontent ibc2">
@@ -92,29 +95,6 @@
  //-->
 
 
-
- function play68_init() {
-     updateShare(0);
- }
-
- function updateShare(bestScore) {
-     imgUrl = '<?php echo $http_domain;?>/public/img/icon.png';
-     lineLink = './index.html';
-     descContent = "创意跳高游戏，快来一起跳！";
-     updateShareScore(bestScore);
-     appid = '';
- }
-
- function updateShareScore(bestScore) {
-     if(bestScore > 0) {
-         shareTitle = "我跳我跳我跳跳跳到" + bestScore + "米，你跳你跳你跳跳跳看！";
-     }
-     else{
-         shareTitle = "我跳我跳我跳跳跳，你跳你跳你跳跳跳！";
-     }
- }
-
- play68_init();
  </script>
 
 </div>
