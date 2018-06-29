@@ -116,6 +116,23 @@ class Poke
     }
 
     /**
+     * @param $siteSessionId
+     * @param $chatSessionId
+     * @param $hrefType
+     * @param $time
+     */
+    public function recordGameResult($siteSessionId, $chatSessionId, $hrefType, $gameUseTime, $gameResult, $gameAccuracy)
+    {
+        $userProfile = $this->zalyHelper->getSiteUserProfile($siteSessionId);
+        if(!$userProfile) {
+            return json_encode(['error_code' => 'fail', 'error_msg' => '请稍候再试！']);
+        }
+        $siteUserId    = $userProfile->getSiteUserId();
+        $siteUserPhoto = $userProfile->getUserPhoto();
+        $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId, $gameResult, $gameUseTime, $gameAccuracy);
+    }
+
+    /**
      * plugin 发送web消息
      *
      * @param $chatSessionId
@@ -166,5 +183,8 @@ switch ($pageType) {
 
     case "share_game":
         $poke->shareGameToChat($siteSessionId, $chatSessionId, $hrefType, $gameUseTime, $gameResult, $gameAccuracy);
+        break;
+    case "game_record":
+        $poke->recordGameResult($siteSessionId, $chatSessionId, $hrefType, $gameUseTime, $gameResult, $gameAccuracy);
         break;
 }

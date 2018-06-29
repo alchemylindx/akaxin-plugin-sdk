@@ -89,7 +89,24 @@
 
 	$(function(){
 		$("#playAgain").on("click", function(){
-			POP.againGame();
+                var hrefType      = $('#href_type').attr('data');
+                var gameUseTime   = $("#game_use_time").attr("data");
+                var gameResult    = $("#game_result").attr("data");
+                var gameAccuacy   =  $("#game_accuracy").attr("data");
+                var chatSessionId = $('#chat_session_id').attr('data');
+
+                $.ajax({
+                    type: "POST",
+                    url:"<?php echo $http_domain;?>/index.php",
+                    dataType:"JSON",
+                    data: { page_type: "game_record", chat_session_id : chatSessionId , href_type:hrefType, game_use_time:gameUseTime+"s" , game_result:gameResult, game_accuracy:gameAccuacy},
+                    success:function (data) {
+
+                    },
+                    fail:function (data) {
+                    }
+                });
+            POP.againGame();
 		});
 		$("#shareGame").on("click", function(){
             $(this).attr("disabled", true);
