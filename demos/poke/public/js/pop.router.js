@@ -82,6 +82,10 @@ POP.gameOver = function() {
     POP.draw.text(131,220,'时间: ' + POP.score.seconds, 16, '#fff'); 
     POP.draw.text("center",270,'' + POP.score.total, 30, '#fff'); 
 
+    document.getElementById("game_use_time").setAttribute("data", POP.score.seconds+"");
+    document.getElementById("game_result").setAttribute("data", POP.score.burst+"");
+    document.getElementById("game_accuracy").setAttribute("data",  POP.score.accuracy+"");
+
     if (POP.newHiscore) {
         POP.draw.text('center', 310, '新记录!!!', 20, col2);
 

@@ -144,13 +144,16 @@ $pageType    = isset($_GET['page_type']) ? $_GET['page_type'] : "first";
 $httpReferer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 $urlParams = $poke->parseUrl($httpReferer);
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
-    $pageType    = isset($_POST['page_type']) ? $_POST['page_type'] : "share_fail";
-    $hrefType    = isset($_POST['href_type']) ? $_POST['href_type'] : "";
-    $gameUseTime = isset($_POST['use_time']) ? $_POST['use_time']:"";
-    $gameResult  = isset($_POST['game_result'])?$_POST['game_result'] :"0";
-    $gameAccuracy = isset($_POST['game_accuracy'])?$_POST['game_accuracy'] :"0";
+    $pageType      = isset($_POST['page_type']) ? $_POST['page_type'] : "share_fail";
+    $hrefType      = isset($_POST['href_type']) ? $_POST['href_type'] : "";
+    $gameUseTime   = isset($_POST['game_use_time']) ? $_POST['game_use_time']:"";
+    $gameResult    = isset($_POST['game_result'])?$_POST['game_result'] :"0";
+    $gameAccuracy  = isset($_POST['game_accuracy'])?$_POST['game_accuracy'] :"0";
     $chatSessionId = isset($_POST['chat_session_id']) ? $_POST['chat_session_id'] :"";
     $siteSessionId = $urlParams['site_session_id'];
+    error_log("gameAccuracy ==".$gameAccuracy);
+    error_log("gameResult ==".$gameResult);
+    error_log("gameUseTime ==".$gameUseTime);
 }
 
 switch ($pageType) {
