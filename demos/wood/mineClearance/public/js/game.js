@@ -119,7 +119,7 @@ Game.prototype.showEnding = function(state) {
     shareGame.prop("disabled", null);
 
     var gameResult = ending.find(".game-result");
-    gameResult.attr('data-flag', (isWin ? "success" : "fail"));
+    gameResult.attr('data-flat', (isWin ? "success" : "faile"));
     ending.show();
 };
 Game.prototype.clearEnding = function() {

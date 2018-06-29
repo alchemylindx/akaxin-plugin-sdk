@@ -8,7 +8,7 @@
 require_once(__DIR__ . "/../../sdk-php/AkaxinPluginApiClient.php");
 require_once(__DIR__ . "/config.php");
 require_once(__DIR__ . "/dbHelper.php");
-require_once(__DIR__ . "/zalyHelper.php");
+require_once(__DIR__ . "/../helper/zalyHelper.php");
 
 class Wood
 {
@@ -209,45 +209,7 @@ eot;
      */
     public function sendPluginFailMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $text)
     {
-        $webCode = <<<eot
-        <!DOCTYPE html><html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-            <style>
-                .wrapper {
-                    height: 100%;
-                    width: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                .zaly-btn, .zaly-btn:hover,.zaly-btn:active, .zaly-btn:focus, .zaly-btn:active:focus, .zaly-btn:active:hover {
-                    width:209px; height:46px;
-                    background:rgba(226,130,179,1);
-                    box-shadow:0px 8px 4px -8px rgba(242,234,165,1);
-                    border-radius:4px; border:4px solid rgba(188,83,131,1);
-                }
-                .zaly-btn-font{
-                    font-size:12px; font-family:PingFangSC-Regular;
-                    color:rgba(255,255,255,1);
-                    line-height:20px;
-                }
 
-            </style>
-        </head>
-        <body>
-        <div class="wrapper">
-            <div>
-                <div style="text-align: center; margin: 16px auto 10px auto; color:rgba(188,83,131,1); font-weight: bold;">
-                    /(ㄒoㄒ)/~~扫雷失败了，{$text}！
-                </div>
-                <div>
-                    <button type="button" class="btn zaly-btn zaly-btn-font">来一起加入挑战吧!</button>
-                </div>
-            </div>
-        </div></body></html>
-eot;
         $this->setMsgByApiClient($chatSessionId, $siteSessionId, $siteUserId, $webCode, $hrefType, $hrefUrl, 120, 300);
     }
     /**
@@ -319,10 +281,10 @@ eot;
     public function setMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $webCode,  $hrefType, $hrefUrl, $height = 30, $width = 160)
     {
         if($hrefType == $this->u2Type) {
-            $this->zalyHelper->setU2WebMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $webCode, $hrefUrl, $height, $width );
+            $this->zalyHelper->sendU2WebMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $webCode, $hrefUrl, $height, $width );
             return;
         }
-        $this->zalyHelper->setGroupWebMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $webCode, $hrefUrl, $height, $width);
+        $this->zalyHelper->sendGroupWebMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $webCode, $hrefUrl, $height, $width);
     }
 }
 

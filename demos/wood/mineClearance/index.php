@@ -6,9 +6,11 @@
  * Time: 10:31 AM
  */
 require_once(__DIR__ . "/../../sdk-php/AkaxinPluginApiClient.php");
+require_once(__DIR__ . "/config.php");
+require_once(__DIR__ . "/dbHelper.php");
+require_once(__DIR__ . "/zalyHelper.php");
 
-
-class Wood
+class MineClearance
 {
     public $db;
     public $hrefUrl;
@@ -20,7 +22,7 @@ class Wood
     public $groupHrefUrl = "zaly://SiteAddress/goto?page=plugin_for_group_chat&site_group_id=chatSessionId&plugin_id=PluginId&&akaxin_param=";
 
     public $akaxinApiClient;
-    public $pluginHttpDomain = "http://192.168.3.43:5188"; ////需要修改成对应的扩展服务器地址
+    public $pluginHttpDomain = "http://192.168.3.43:5166"; ////需要修改成对应的扩展服务器地址
     public static $instance = null;
 
     public $cssForWebmsg;
@@ -30,7 +32,12 @@ class Wood
     public $pluginId;
     public function __construct()
     {
-
+        $this->dbHelper   = DBHelper::getInstance();
+        $this->zalyHelper = ZalyHelper::getInstance();
+        $config = getConf();
+        $this->pluginId = $config['plugin_id'];
+        $this->siteAddress = $config['site_address'];
+        $this->pluginHttpDomain = $config['plugin_http_domain'];
     }
 
     /**
@@ -41,7 +48,7 @@ class Wood
     public static function getInstance()
     {
         if(!self::$instance) {
-            self::$instance = new Wood();
+            self::$instance = new MineClearance();
         }
         return self::$instance;
     }
@@ -54,7 +61,7 @@ class Wood
     public function render($fileName, $params = [])
     {
         ob_start();
-        $path = dirname(__DIR__)."/".basename(__DIR__).'/'.$fileName.'.html';
+        $path = dirname(__DIR__)."/".basename(__DIR__).'/Views/'.$fileName.'.html';
         if ($params) {
             extract($params, EXTR_SKIP);
         }
@@ -118,6 +125,8 @@ class Wood
 
         }
     }
+
+
 
     /**
      * 得到hrefUrl
@@ -319,18 +328,32 @@ eot;
     }
 }
 
-$wood = Wood::getInstance();
+$mineClearance = MineClearance::getInstance();
 $pageType    = isset($_GET['page_type']) ? $_GET['page_type'] : "first";
 $httpReferer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 
+$urlParams = $mineClearance->parseUrl($httpReferer);
+error_log("url params ==" . json_encode($urlParams));
+//return ['chat_session_id' => $chatSessionId, 'href_type' => $hrefType, 'akaxin_param' => $akaxinReferer->getAkaxinParam()];
+if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
+    $pageType  = isset($_POST['page_type']) ? $_POST['page_type'] : "share_fail";
+    $hrefType  = isset($_POST['href_type']) ? $_POST['href_type'] : "";
+    $chatSessionId = isset($_POST['chat_session_id']) ? $_POST['chat_session_id'] :"";
+    $siteSessionId = $urlParams['site_session_id'];
+    $time = isset($_POST['use_time']) ? $_POST['use_time']:"";
+    $gameType = isset($_POST['game_type'])?$_POST['game_type'] : "unknow";
+    error_log(" time ==".$time);
 
+}
 switch ($pageType) {
     case "first":
-        $urlParams = [];
-        echo $wood->render("index", $urlParams);
+        $urlParams['http_domain'] = $mineClearance->pluginHttpDomain;
+        $urlParams['suffix'] = "?".time();
+        $urlParams['href_url'] = $mineClearance->pluginHttpDomain."/index.php?chat_session_id=".$urlParams['chat_session_id']."&href_type=".$urlParams['href_type'];
+        echo $mineClearance->render("index", $urlParams);
         break;
 
     case "share_fail":
-        $wood->shareGameToChat($siteSessionId, $chatSessionId, $hrefType, $time, $gameType);
+        $mineClearance->shareGameToChat($siteSessionId, $chatSessionId, $hrefType, $time, $gameType);
         break;
 }

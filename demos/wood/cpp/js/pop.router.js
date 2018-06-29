@@ -47,11 +47,19 @@ POP.splash = function() {
         POP.draw.text(20,POP.H - 20, 'This game is much more fun on touch devices', 11, 'rgba(255,255,255,0.5)');
     }*/
 
-    POP.draw.text(45,135,'戳泡泡！',64, 'rgba(0,0,0,0.3)');
-    POP.draw.text(40,130,'戳泡泡！',64);
-    POP.draw.text(110,240, POP.Ua.action + '开始游戏', 16, col);
-    POP.draw.text(128, 340, '最高分', 20, 'rgba(255,255,255,0.8)');
+    // POP.draw.text(45,135,'戳泡泡！',64, 'rgba(0,0,0,0.3)');
+    // POP.draw.text(40,130,'戳泡泡！',64);
+    // POP.draw.text(110,240, POP.Ua.action + '开始游戏', 16, col);
+    // POP.draw.text(128, 340, '最高分', 20, 'rgba(255,255,255,0.8)');
+    // POP.draw.text("center", 380, POP.hiScore.toString(), 24, 'rgba(255,255,255,0.8)');
+    //
+
+    POP.draw.text("center",135,'戳泡泡！',64, 'rgba(0,0,0,0.3)');
+    POP.draw.text("center",130,'戳泡泡！',64);
+    POP.draw.text("center",240, POP.Ua.action + '开始游戏', 16, col);
+    POP.draw.text("center", 340, '最高分', 20, 'rgba(255,255,255,0.8)');
     POP.draw.text("center", 380, POP.hiScore.toString(), 24, 'rgba(255,255,255,0.8)');
+
 
     if (POP.m.click && POP.delay > 20) {
         POP.textLayer.style.display = 'none';
@@ -87,6 +95,7 @@ POP.gameOver = function() {
 
         // POP.draw.text('center', 320, POP.score.total.toString(), 20, col2);
     }
+
 	// 绘画更多游戏
 	//POP.draw.rect(10, 330, 50, 20, "#fff")
 	
@@ -101,10 +110,7 @@ POP.gameOver = function() {
 		POP.isEndGame = true;
 		//btGame.setShare({title: "戳泡泡戳上瘾了，拿了"+POP.score.total+"分。你要不要来爽一把？"});
 		//btGame.playScoreMsg("泡泡克星就是你！拿了"+POP.score.total+"分，不去炫耀一下吗？");
-		dp_submitScore(POP.score.total);
 	}
-	
-
 };
 POP.isEndGame = false;
 POP.againGame = function(){

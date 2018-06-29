@@ -8,7 +8,7 @@
 require_once(__DIR__ . "/../../sdk-php/AkaxinPluginApiClient.php");
 require_once(__DIR__ . "/config.php");
 require_once(__DIR__ . "/dbHelper.php");
-require_once(__DIR__ . "/zalyHelper.php");
+require_once(__DIR__ . "/../helper/zalyHelper.php");
 
 class MineClearance
 {
@@ -113,7 +113,8 @@ class MineClearance
         switch ($gameType) {
             case "fail":
                 $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId, "fail", $time);
-                $this->sendPluginFailMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $time);
+                error_log("site user id = ".$siteUserId);
+                $this->sendPluginFailMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $time);
                 break;
             case "success":
                 $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId, "success", $time);
@@ -121,7 +122,7 @@ class MineClearance
                 break;
             default:
                 $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId, "unkonw", $time);
-                $this->sendPluginMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $time);
+                $this->sendPluginMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl);
 
         }
     }
@@ -157,7 +158,7 @@ class MineClearance
      *
      * @author 尹少爷 2018.6.11
      */
-    public function sendPluginMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $text)
+    public function sendPluginMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl)
     {
         $webCode = <<<eot
         <!DOCTYPE html><html lang="en">
@@ -198,7 +199,7 @@ class MineClearance
             </div>
         </div></body></html>
 eot;
-        $this->setMsgByApiClient($chatSessionId, $siteSessionId, $siteUserId, $webCode, $hrefType, $hrefUrl, 120, 300);
+        $this->sendWebMsgByApiClient($chatSessionId, $siteSessionId, $siteUserId, $webCode, $hrefType, $hrefUrl, 120, 300);
     }
 
     /**
@@ -209,48 +210,10 @@ eot;
      *
      * @author 尹少爷 2018.6.11
      */
-    public function sendPluginFailMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $text)
+    public function sendPluginFailMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $text)
     {
-        $webCode = <<<eot
-        <!DOCTYPE html><html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-            <style>
-                .wrapper {
-                    height: 100%;
-                    width: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                .zaly-btn, .zaly-btn:hover,.zaly-btn:active, .zaly-btn:focus, .zaly-btn:active:focus, .zaly-btn:active:hover {
-                    width:209px; height:46px;
-                    background:rgba(226,130,179,1);
-                    box-shadow:0px 8px 4px -8px rgba(242,234,165,1);
-                    border-radius:4px; border:4px solid rgba(188,83,131,1);
-                }
-                .zaly-btn-font{
-                    font-size:12px; font-family:PingFangSC-Regular;
-                    color:rgba(255,255,255,1);
-                    line-height:20px;
-                }
-
-            </style>
-        </head>
-        <body>
-        <div class="wrapper">
-            <div>
-                <div style="text-align: center; margin: 16px auto 10px auto; color:rgba(188,83,131,1); font-weight: bold;">
-                    /(ㄒoㄒ)/~~扫雷失败了，{$text}！
-                </div>
-                <div>
-                    <button type="button" class="btn zaly-btn zaly-btn-font">来一起加入挑战吧!</button>
-                </div>
-            </div>
-        </div></body></html>
-eot;
-        $this->setMsgByApiClient($chatSessionId, $siteSessionId, $siteUserId, $webCode, $hrefType, $hrefUrl, 120, 300);
+        $text = " /(ㄒoㄒ)/~~扫雷失败了，用时{$text}！";
+        $this->sendTextMsgByApiClient($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $text);
     }
     /**
      * @param $chatSessionId
@@ -301,7 +264,7 @@ eot;
             </div>
         </div></body></html>
 eot;
-        $this->setMsgByApiClient($chatSessionId, $siteSessionId, $siteUserId, $webCode, $hrefType, $hrefUrl, 120, 300);
+        $this->sendWebMsgByApiClient($chatSessionId, $siteSessionId, $siteUserId, $webCode, $hrefType, $hrefUrl, 120, 300);
     }
 
     /**
@@ -318,13 +281,36 @@ eot;
      *
      * @author 尹少爷 2018.6.11
      */
-    public function setMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $webCode,  $hrefType, $hrefUrl, $height = 30, $width = 160)
+    public function sendWebMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $webCode,  $hrefType, $hrefUrl, $height = 30, $width = 160)
     {
         if($hrefType == $this->u2Type) {
-            $this->zalyHelper->setU2WebMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $webCode, $hrefUrl, $height, $width );
+            $this->zalyHelper->sendU2WebMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $webCode, $hrefUrl, $height, $width );
             return;
         }
-        $this->zalyHelper->setGroupWebMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $webCode, $hrefUrl, $height, $width);
+        $this->zalyHelper->sendGroupWebMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $webCode, $hrefUrl, $height, $width);
+    }
+
+    /**
+     * plugin 发送web消息
+     *
+     * @param $chatSessionId
+     * @param $siteSessionId
+     * @param $siteUserId
+     * @param $webCode
+     * @param $hrefType
+     * @param $hrefUrl
+     * @param int $height
+     * @param int $width
+     *
+     * @author 尹少爷 2018.6.11
+     */
+    public function sendTextMsgByApiClient($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $text)
+    {
+        if($hrefType == $this->u2Type) {
+            $this->zalyHelper->sendU2TextMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId,$text );
+            return;
+        }
+        $this->zalyHelper->sendGroupTextMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId,$text);
     }
 }
 
@@ -333,7 +319,6 @@ $pageType    = isset($_GET['page_type']) ? $_GET['page_type'] : "first";
 $httpReferer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 
 $urlParams = $mineClearance->parseUrl($httpReferer);
-error_log("url params ==" . json_encode($urlParams));
 //return ['chat_session_id' => $chatSessionId, 'href_type' => $hrefType, 'akaxin_param' => $akaxinReferer->getAkaxinParam()];
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
     $pageType  = isset($_POST['page_type']) ? $_POST['page_type'] : "share_fail";
@@ -343,6 +328,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
     $time = isset($_POST['use_time']) ? $_POST['use_time']:"";
     $gameType = isset($_POST['game_type'])?$_POST['game_type'] : "unknow";
     error_log(" time ==".$time);
+    error_log(" gameType ==".$gameType);
 
 }
 switch ($pageType) {

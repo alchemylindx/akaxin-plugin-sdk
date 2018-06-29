@@ -3,7 +3,7 @@
 $conf = array(
 
     // 扩展服务器WEB地址，用以加载静态文件的根目录
-    "plugin_http_domain" => "http://192.168.3.43:5166/",
+    "plugin_http_domain" => "http://192.168.3.43:5199",
 
     // 用户在客户端访问站点的地址
     "site_address" => "192.168.3.43:2022",
@@ -21,7 +21,7 @@ $conf = array(
 
     // 一定要设置此值！！！设置成一个随机字符串，比如：012f214526b489a18f2c1a1f3523a041
     // 因为sqlite是个单体文件，要防止脱裤
-    "db_safe_prefix" => "shaoye_5166",
+    "db_safe_prefix" => "shaoye_5199",
 );
 
 function getConf() {
