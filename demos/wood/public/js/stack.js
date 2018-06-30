@@ -1,5 +1,6 @@
 
  var logh=20;
+ var loghPercent = 5;
  extraleft=new Array();
  extraleft[1]=6;
  extraleft[2]=4;
@@ -7,7 +8,7 @@
  extraleft[4]=5;
  extraright=10;
  var saw=308;
- var sah=247;
+ var sah=80; ////整体高度的80%， 每个木头5%
  var stdir;
  var stwidth=new Array();
  var stmargin=new Array();
@@ -54,26 +55,25 @@
   	tmp.onmousedown=handleclick;
   	tmp.onclick = function() {return false;}
   }
-  var httpDomain = document.getElementById("http_domain").getAttribute("data");
+        var httpDomain = document.getElementById("http_domain").getAttribute("data");
      var imgUrl = httpDomain+"/public/img/";
      tmp.style.backgroundImage='url('+imgUrl+'/stackthelog.png)';
-tmp.style.backgroundPosition='center center';
-tmp.style.backgroundRepeat='no-repeat';
-  tmp.style.width='298px';
-  tmp.style.height='55px';
-tmp.style.padding='17px 11px 0 11px';
-  tmp.style.zIndex='30';
-  tmp.style.margin='243px 0 0 0';
-  $('st_outerarea').appendChild(tmp);
+     tmp.style.backgroundPosition='center center';
+     tmp.style.backgroundRepeat='no-repeat';
+     tmp.style.width='298px';
+     tmp.style.height='55px';
+     tmp.style.padding='17px 11px 0 11px';
+     tmp.style.zIndex='30';
+     tmp.style.margin='80% 0px 0px';
+     $('st_outerarea').appendChild(tmp);
 
-  tmp=document.createElement('div')
-  tmp.id='st_scrollarea';
      var imgUrl = httpDomain+"/public/img/";
-
+     tmp=document.createElement('div')
+  tmp.id='st_scrollarea';
      tmp.style.backgroundImage='url('+imgUrl+'/bg1250.png)';
   tmp.style.backgroundPosition='bottom center';
   tmp.style.width='320px';
-  tmp.style.height='315px';
+  tmp.style.height='100%';
   tmp.style.position='absolute';
   $('st_outerarea').appendChild(tmp);
 
@@ -83,7 +83,7 @@ tmp.style.padding='17px 11px 0 11px';
   tmp.style.position='absolute';
   tmp.style.width='320px';
   tmp.style.height='87px';
-  tmp.style.marginTop='228px';
+  tmp.style.marginTop='70%';
   tmp.style.zIndex='10';
   $('st_scrollarea').appendChild(tmp);
 
@@ -93,7 +93,7 @@ tmp.style.padding='17px 11px 0 11px';
   tmp.style.position='absolute';
   tmp.style.width='311px';
   tmp.style.height='39px';
-  tmp.style.marginTop='217px';
+  tmp.style.marginTop='75%';
   tmp.style.zIndex='20';
   $('st_scrollarea').appendChild(tmp);
 
@@ -103,7 +103,7 @@ tmp.style.padding='17px 11px 0 11px';
   tmp.id='stp_0';
   tmp.style.position='absolute';
   tmp.style.height=logh+'px';
-  tmp.style.marginTop=sah-logh+'px';
+  tmp.style.marginTop=sah-loghPercent+5+'%';
   tmp.style.marginLeft=stmargin[0]-extraleft[sttype[0]]+7+'px';
   $('st_scrollarea').appendChild(tmp);
   showaronk('stp_0',sttype[0],ststart[0],stwidth[0]);
@@ -114,13 +114,9 @@ tmp.style.padding='17px 11px 0 11px';
 
 function stack_init() {
  if(sts>10) {
-  paddingtarget=(sts-10)*(logh-4);
-  if(sts > 15) {
-   $('st_scrollarea').removeChild($('stp_'+(sts-16)));
-      console.log("add woodstack_init");
-
-      if(sts % 2 == 0 && sts>16) {   $('st_scrollarea').removeChild($('shd_'+(sts-16)));}
-  }
+  paddingtarget=5;
+   $('st_scrollarea').removeChild($('stp_'+(sts-10)));
+   if(sts % 2 == 0 && sts>10) {   $('st_scrollarea').removeChild($('shd_'+(sts-10)));}
  }
 
  sts++;
@@ -136,11 +132,13 @@ function stack_init() {
  tmp.style.position='absolute';
  tmp.style.height=logh+'px';
  tmp.style.width=extraleft[sttype[sts]]+stwidth[sts]+extraright/2+'px';
- tmp.style.marginTop=sah-(sts+2)*(logh-4);
+ tmp.style.marginTop=(sah-(sts+1)*(loghPercent))+"%";
  tmp.style.marginLeft=stmargin[sts]-extraleft[sttype[sts]]+7+'px';
  $('st_scrollarea').appendChild(tmp);
  showaronk('stp_'+sts,sttype[sts],ststart[sts],stwidth[sts]);
  stinterval=setInterval('stack_dothemove()',50);
+
+ console.log("sts=="+ sts +"; margin top ==" + (sah-sts*(loghPercent)-1));
 }
 
 function stack_dothemove() {
@@ -186,8 +184,7 @@ function handleclick() {
   tmp.style.width='150px';
   tmp.style.backgroundColor='#333333';
   tmp.style.marginLeft='85px';
-  tmp3=(sah-(sts+2)*(logh-4)-16);
-  tmp.style.marginTop=tmp3+'px';
+  tmp.style.marginTop=(sah-(sts+2)*(loghPercent))+"%";
   $('st_scrollarea').appendChild(tmp);
   tmp2=new Array();
   tmp2[0]="";
@@ -216,7 +213,7 @@ function addshadow() {
   tmp.style.width=(extraleft[sttype[sts]]+stwidth[sts]+extraright/2)+'px';
   tmp.style.height='30px';
   tmp.style.marginLeft=(stmargin[sts]-extraleft[sttype[sts]]+7)+'px';
-  tmp.style.marginTop=(sah-(sts+1)*(logh-4)-1)+'px';
+  tmp.style.marginTop=(sah-(sts+2)*(loghPercent))+"%";
   $('st_scrollarea').appendChild(tmp);
 }
 
@@ -241,7 +238,7 @@ function cutaronk(crid,crtype,crstart,crstays,crfrom) {
  if(crfrom !='') {
   tmp=new Array();
   if(crfrom == 'left' || crfrom == 'right') {
-   tmp[0]="$('"+crid+"').style.marginTop='"+(sah-(sts+1)*(logh-4))+"px';document.getElementById('"+crid+"').childNodes[1].style.marginTop='2px';  document.getElementById('"+crid+"').childNodes[0].style.zIndex="+((sts % 2)?(13):(16))+";";
+   tmp[0]="$('"+crid+"').style.marginTop='"+(sah-sts*(loghPercent)-1)+"%';document.getElementById('"+crid+"').childNodes[1].style.marginTop='2px';  document.getElementById('"+crid+"').childNodes[0].style.zIndex="+((sts % 2)?(13):(16))+";";
    tmp[1]="$('"+crid+"').childNodes[1].style.opacity='.75'; $('"+crid+"').childNodes[1].style.marginTop='7px';";
    tmp[2]="$('"+crid+"').childNodes[1].style.opacity='.5';$('"+crid+"').childNodes[1].style.marginTop='12px';";
    tmp[3]="$('"+crid+"').childNodes[1].style.opacity='.25';$('"+crid+"').childNodes[1].style.marginTop='17px';";
@@ -258,7 +255,7 @@ function cutaronk(crid,crtype,crstart,crstays,crfrom) {
   stispace[ttt]=tmp;
   setTI(ttt,50);
  } else {
-  document.getElementById(crid).style.marginTop=(sah-(sts+1)*(logh-4))+'px';  document.getElementById(crid).childNodes[0].style.zIndex=((sts % 2)?(13):(16));
+  document.getElementById(crid).style.marginTop=(sah-sts*(loghPercent)-1)+'%';  document.getElementById(crid).childNodes[0].style.zIndex=((sts % 2)?(13):(16));
   stack_init();
  }
 }

@@ -205,10 +205,10 @@ console.log("ppp");
   }
 
   function sendDataToServer(pageType){
-      var hrefType = document.getElementById("href_type").getAttribute('data');
-      var gameResult = document.getElementById("game_result").getAttribute("data");
+      var hrefType      = document.getElementById("href_type").getAttribute('data');
+      var gameResult    = document.getElementById("game_result").getAttribute("data");
+      var httpDomain    = document.getElementById("http_domain").getAttribute("data");
       var chatSessionId = document.getElementById("chat_session_id").getAttribute('data');
-      var httpDomain = document.getElementById("http_domain").getAttribute("data");
 
       if (window.XMLHttpRequest) {////iE7+ fairefox, opera, chrome, safari
           console.log("XMLHttpRequest");

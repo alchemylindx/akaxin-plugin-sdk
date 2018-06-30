@@ -4,7 +4,7 @@ $conf = array(
 
     // 扩展服务器WEB地址，用以加载静态文件的根目录
     "plugin_http_domain" => "http://192.168.3.43:5188",
-    "plugin_http_domain" => "http://192.168.1.105:5188",
+    "plugin_http_domain" => "http://192.168.1.101:5188",
 
 
 
