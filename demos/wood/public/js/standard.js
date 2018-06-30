@@ -224,7 +224,7 @@ console.log("ppp");
           var xmlHttp = new XMLHttpRequest();
           xmlHttp.open("post", url, true);///异步请求
           xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-          xmlHttp.send(JSON.stringify(data));
+          xmlHttp.send("game_data="+JSON.stringify(data));
           var response = xmlHttp.responseText;
           xmlHttp.onreadystatechange = function () {
               if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {

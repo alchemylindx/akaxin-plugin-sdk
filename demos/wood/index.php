@@ -110,7 +110,8 @@ class Wood
         $siteUserId    = $userProfile->getSiteUserId();
         $siteUserPhoto = $userProfile->getUserPhoto();
         $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId,  $gameResult);
-        $this->setTextMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $gameResult, $hrefType);
+        $text= "我在「堆木头」游戏中，得了$gameResult 分，快来挑战我吧！";
+        $this->setTextMsgByApiClient($chatSessionId, $siteSessionId,$siteUserId, $text, $hrefType);
     }
     /**
      * @param $siteSessionId
@@ -118,7 +119,7 @@ class Wood
      * @param $hrefType
      * @param $time
      */
-    public function recordGame($siteSessionId, $chatSessionId, $hrefType, $gameResult)
+    public function recordGame($siteSessionId, $chatSessionId, $gameResult)
     {
         $userProfile = $this->zalyHelper->getSiteUserProfile($siteSessionId);
         if(!$userProfile) {
@@ -126,29 +127,8 @@ class Wood
         }
         $siteUserId    = $userProfile->getSiteUserId();
         $siteUserPhoto = $userProfile->getUserPhoto();
-        $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId,  $gameResult);
+        $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId, $gameResult);
     }
-    /**
-     * 得到hrefUrl
-     *
-     * @param $chatSessionId
-     * @param $gameNum
-     * @param $gameType
-     * @param $hrefType
-     * @return mixed|string
-     *
-     */
-    protected  function getHrefUrl($chatSessionId, $siteUserId, $hrefType)
-    {
-        if($hrefType == $this->u2Type) {
-            $hrefUrl = str_replace(["SiteAddress", "chatSessionId", "PluginId"], [$this->siteAddress, $siteUserId, $this->pluginId], $this->u2HrefUrl);
-        } else {
-            $hrefUrl = str_replace(["SiteAddress", "chatSessionId", "PluginId"], [$this->siteAddress, $chatSessionId, $this->pluginId], $this->groupHrefUrl);
-        }
-        return $hrefUrl;
-    }
-
-
     /**
      * plugin 发送web消息
      *
@@ -199,17 +179,16 @@ class Wood
 $wood = Wood::getInstance();
 $pageType    = isset($_GET['page_type']) ? $_GET['page_type'] : "first";
 $httpReferer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-
-$urlParams = $wood->parseUrl($httpReferer);
+$urlParams   = $wood->parseUrl($httpReferer);
 
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
-    $pageType  = isset($_POST['page_type']) ? $_POST['page_type'] : "share_game";
-    $hrefType  = isset($_POST['href_type']) ? $_POST['href_type'] : "";
-    $chatSessionId = isset($_POST['chat_session_id']) ? $_POST['chat_session_id'] :"";
+    $data = json_decode($_POST['game_data'], true);
+    $pageType  = isset($data['page_type']) ? $data['page_type'] : "share_game";
+    $hrefType  = isset($data['href_type']) ? $data['href_type'] : "";
+    $chatSessionId = isset($data['chat_session_id']) ? $data['chat_session_id'] :"";
     $siteSessionId = $urlParams['site_session_id'];
-    $gameResult = isset($_POST['game_result'])?$_POST['game_result'] : "0";
+    $gameResult = isset($data['game_result'])?$data['game_result'] : "0";
 }
-error_log("game result  page type ". $pageType);
 
 switch ($pageType) {
     case "first":
@@ -223,6 +202,6 @@ switch ($pageType) {
         $wood->shareGameToChat($siteSessionId, $chatSessionId, $hrefType, $gameResult);
         break;
     case "record_game":
-        $wood->recordGame($siteSessionId, $chatSessionId, $hrefType, $gameResult);
+        $wood->recordGame($siteSessionId, $chatSessionId, $gameResult);
         break;
 }
