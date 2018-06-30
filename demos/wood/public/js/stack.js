@@ -301,11 +301,11 @@ function gameover() {
  gamesplayed++;
  setCookie('stack_gamesplayed',gamesplayed);
  document.getElementById('gamesplayed').innerHTML=gamesplayed;
- if(stscore>theirbest) {
+    document.getElementById("game_result").setAttribute("data", stscore);
+    if(stscore>theirbest) {
   setCookie('stack_bestscore',stscore);
   document.getElementById('yourbest').innerHTML=stscore;
 
-  document.getElementById("game_result").setAttribute("data", stscore);
 
   theirbest=stscore;
      iShareGame('<h1>游戏结束: '+stscore+'分</h1>厉害，你又破纪录了','restartgame();');
