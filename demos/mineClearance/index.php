@@ -25,8 +25,6 @@ class MineClearance
     public $pluginHttpDomain = "http://192.168.3.43:5166"; ////需要修改成对应的扩展服务器地址
     public static $instance = null;
 
-    public $cssForWebmsg;
-
     public $dbHelper;
     public $zalyHelper;
     public $pluginId;
@@ -104,6 +102,7 @@ class MineClearance
     public function shareGameToChat($siteSessionId, $chatSessionId, $hrefType, $time, $gameType)
     {
         $userProfile = $this->zalyHelper->getSiteUserProfile($siteSessionId);
+        error_log("session id ==" . $siteSessionId);
         if(!$userProfile) {
             return json_encode(['error_code' => 'fail', 'error_msg' => '请稍候再试！']);
         }
@@ -111,12 +110,12 @@ class MineClearance
         $siteUserPhoto = $userProfile->getUserPhoto();
         $hrefUrl = $this->getHrefUrl($chatSessionId, $siteUserId, $hrefType);
         switch ($gameType) {
-            case "fail":
+            case "share_fail":
                 $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId, "fail", $time);
                 error_log("site user id = ".$siteUserId);
                 $this->sendPluginFailMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $time);
                 break;
-            case "success":
+            case "share_success":
                 $this->dbHelper->insertGameResult($siteUserId, $siteUserPhoto, $chatSessionId, "success", $time);
                 $this->sendPluginSuccessMsg($chatSessionId, $siteSessionId, $siteUserId, $hrefType, $hrefUrl, $time);
                 break;
@@ -340,6 +339,7 @@ switch ($pageType) {
         break;
 
     case "share_fail":
+    case "share_success":
         $mineClearance->shareGameToChat($siteSessionId, $chatSessionId, $hrefType, $time, $gameType);
         break;
 }
