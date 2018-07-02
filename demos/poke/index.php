@@ -9,7 +9,7 @@ require_once(__DIR__ . "/../../sdk-php/AkaxinPluginApiClient.php");
 
 require_once(__DIR__ . "/config.php");
 require_once(__DIR__ . "/dbHelper.php");
-require_once(__DIR__ . "/../helper/zalyHelper.php");
+require_once(__DIR__ . "/zalyHelper.php");
 
 class Poke
 {
@@ -86,9 +86,12 @@ class Poke
         if($akaxinReferer->isU2Chat()){
             $chatSessionId = $akaxinReferer->getChatFriendId();
             $hrefType = "u2_msg";
-        } else {
+        } elseif($akaxinReferer->isGroupChat()){
             $chatSessionId = $akaxinReferer->getChatGroupId();
             $hrefType = "group_msg";
+        } else {
+            $chatSessionId = "";
+            $hrefType = "session";
         }
         $siteSessionId = $akaxinReferer->getAkaxinSessionId();
         return ['chat_session_id' => $chatSessionId, 'href_type' => $hrefType, 'akaxin_param' => $akaxinReferer->getAkaxinParam(), "site_session_id" => $siteSessionId];
@@ -166,11 +169,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
     $gameAccuracy  = isset($_POST['game_accuracy'])?$_POST['game_accuracy'] :"0";
     $chatSessionId = isset($_POST['chat_session_id']) ? $_POST['chat_session_id'] :"";
     $siteSessionId = $urlParams['site_session_id'];
-    error_log("gameAccuracy ==".$gameAccuracy);
-    error_log("gameResult ==".$gameResult);
-    error_log("gameUseTime ==".$gameUseTime);
 }
-
 switch ($pageType) {
     case "first":
         $urlParams['http_domain'] = $poke->pluginHttpDomain;

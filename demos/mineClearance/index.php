@@ -8,7 +8,7 @@
 require_once(__DIR__ . "/../../sdk-php/AkaxinPluginApiClient.php");
 require_once(__DIR__ . "/config.php");
 require_once(__DIR__ . "/dbHelper.php");
-require_once(__DIR__ . "/../helper/zalyHelper.php");
+require_once(__DIR__ . "/zalyHelper.php");
 
 class MineClearance
 {
@@ -85,9 +85,12 @@ class MineClearance
         if($akaxinReferer->isU2Chat()){
             $chatSessionId = $akaxinReferer->getChatFriendId();
             $hrefType = "u2_msg";
-        } else {
+        } elseif($akaxinReferer->isGroupChat()){
             $chatSessionId = $akaxinReferer->getChatGroupId();
             $hrefType = "group_msg";
+        } else {
+            $chatSessionId = "";
+            $hrefType = "session";
         }
         $siteSessionId = $akaxinReferer->getAkaxinSessionId();
         return ['chat_session_id' => $chatSessionId, 'href_type' => $hrefType, 'akaxin_param' => $akaxinReferer->getAkaxinParam(), "site_session_id" => $siteSessionId];

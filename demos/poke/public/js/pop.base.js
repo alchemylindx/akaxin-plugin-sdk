@@ -14,8 +14,8 @@ var POP = {
 
 	canvas: null, // html canvas object
 	ctx: null, // context for interacting with canvas
-	W: 480, // shortcut for canvas width
-	H: 960, // shortcut for canvas height
+	W: 960, // shortcut for canvas width
+	H: 1280, // shortcut for canvas height
     offset: null, // offset from edge of screen to canvas
     debug: false,
     delay: 0,
@@ -37,7 +37,6 @@ var POP = {
     bonus: null,
     wave: { r: 50, x: -25, y: -40, total: null },
     ua: { mobile: null, browser: null, version: null, platform: null, scale: 1 },
-
 
     // store mouse / click coordinates
     m: {

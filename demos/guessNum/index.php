@@ -115,9 +115,12 @@ eot;
         if($akaxinReferer->isU2Chat()){
             $chatSessionId = $akaxinReferer->getChatFriendId();
             $hrefType = "u2_msg";
-        } else {
+        } elseif($akaxinReferer->isGroupChat()){
             $chatSessionId = $akaxinReferer->getChatGroupId();
             $hrefType = "group_msg";
+        } else {
+            $chatSessionId = "";
+            $hrefType = "session";
         }
         return ['chat_session_id' => $chatSessionId, 'href_type' => $hrefType, 'akaxin_param' => $akaxinReferer->getAkaxinParam()];
     }

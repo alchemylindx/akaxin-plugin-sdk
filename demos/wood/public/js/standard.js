@@ -270,7 +270,14 @@ function iShareGame(iquestion,idoit) {
     var httpDomain = document.getElementById("http_domain").getAttribute("data");
     var imgUrl = httpDomain+"/public/img/";
     // document.getElementById('alert_content').innerHTML=iquestion+'<br style="clear:both" /><br /><a href="#" ontouchstart="idismiss();eval(\''+idoit+'\'); return false;" onclick="idismiss();eval(\''+idoit+'\'); return false;"><img src=\'+imgUrl+\'/b_yes.png" alt="Yes" /></a><a href="#" ontouchstart="idismiss(); return false;" onclick="idismiss(); return false;"><img src=\'+imgUrl+\'/b_no.png" alt="No" /></a>';
-    document.getElementById('alert_content').innerHTML=iquestion+'<br style="clear:both" /><br /><button class="woodBtnConfrim" ontouchstart="idismiss();eval(\''+idoit+'\'); return false;" onclick="idismiss();eval(\''+idoit+'\'); return false;" >再来一局</button><button class="woodBtnShare" href="#" ontouchstart="iShare(); return false;" onclick="iShare(); return false;" >分享战绩</button>';
+    var hrefType = document.getElementById("href_type").getAttribute("data");
+    var html =  iquestion+'<br style="clear:both" /><br /><button class="woodBtn" ontouchstart="idismiss();eval(\''+idoit+'\'); return false;" onclick="idismiss();eval(\''+idoit+'\'); return false;" >再来一局</button>';
+
+    if(hrefType == "u2_msg" || hrefType == "group_msg") {
+         html += '<button class="woodBtnShare" href="#" ontouchstart="iShare(); return false;" onclick="iShare(); return false;" >分享战绩</button>';
+    }
+
+    document.getElementById('alert_content').innerHTML= html;
 
     document.getElementById('alertbox').style.display='block';
 }

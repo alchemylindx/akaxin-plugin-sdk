@@ -19,8 +19,6 @@ POP.Touch = function(x, y) {
                             'rgba(255,0,0,' + this.opacity + ')');
             this.opacity = this.opacity - 0.05;
         }
-
-    
     };
 
 };

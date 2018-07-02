@@ -65,7 +65,6 @@ POP.splash = function() {
 
 };
 
-
 POP.gameOver = function() {
 
     var opacity = Math.abs(Math.sin(POP.timer * 0.8)),
@@ -124,6 +123,7 @@ POP.againGame = function(){
 
 	POP.inputBox.style.display = 'none';
 	POP.state = 'splash';
+	POP.play();
 }
 
 POP.hiScores = function() {

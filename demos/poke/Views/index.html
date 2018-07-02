@@ -41,12 +41,21 @@
         </p>
     </div>
     <div id="inputBox">
-		<a href="#" id="playAgain">
-			再来一次
-		</a>
-		<a href="#" id="shareGame">
-			炫耀一下
-		</a>
+
+        <?php if($href_type=="u2_msg" || $href_type=="group_msg") { ?>
+            <a href="#" id="playAgain">
+                再来一次
+            </a>
+            <a href="#" id="shareGame">
+                炫耀一下
+            </a>
+        <?php } else {  ?>
+
+            <a href="#" id="playAgainByNotShare">
+                再来一次
+            </a>
+
+        <?php } ?>
 
     </div>
 	<input id="bt-game-id" type="hidden" value="3-pop">
@@ -80,7 +89,6 @@
 
             document.writeln('<h1>对不起，您的浏览器不支持html5！</h1>');
             document.writeln('<h2>请更换浏览器继续玩游戏！</h2>');
-
         }
         else {
             POP.init();
@@ -107,7 +115,29 @@
                     }
                 });
             POP.againGame();
+
 		});
+        $("#playAgainByNotShare").on("click", function(){
+            var hrefType      = $('#href_type').attr('data');
+            var gameUseTime   = $("#game_use_time").attr("data");
+            var gameResult    = $("#game_result").attr("data");
+            var gameAccuacy   =  $("#game_accuracy").attr("data");
+            var chatSessionId = $('#chat_session_id').attr('data');
+
+            $.ajax({
+                type: "POST",
+                url:"<?php echo $http_domain;?>/index.php",
+                dataType:"JSON",
+                data: { page_type: "game_record", chat_session_id : chatSessionId , href_type:hrefType, game_use_time:gameUseTime+"s" , game_result:gameResult, game_accuracy:gameAccuacy},
+                success:function (data) {
+
+                },
+                fail:function (data) {
+                }
+            });
+            POP.againGame();
+
+        });
 		$("#shareGame").on("click", function(){
             $(this).attr("disabled", true);
             var hrefType      = $('#href_type').attr('data');
@@ -134,7 +164,7 @@
 			location.reload();
 		}
 	});
-	btGame.resizePlayArea($("#SF_Game"), 480, 960, "center", "center");
+	btGame.resizePlayArea($("#SF_Game"), 960, 1280, "center", "center");
 	$("#SF_Game").on("resizePlayArea", function(){
 		SF_gameStart();
 		SF_gameStart = function(){};

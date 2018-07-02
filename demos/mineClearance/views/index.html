@@ -19,7 +19,7 @@
       <div class="status">
           <div class="current panel ">当前用时 <span class="use_time">0.3</span> s</div>
           <input type="hidden" class="chat_session_id" data="<?php echo $chat_session_id;?>">
-          <input type="hidden" class="href_type" data="<?php echo $href_type;?>">
+          <input type="hidden"  id="href_type" class="href_type" data="<?php echo $href_type;?>">
       </div>
 
       <div class="game panel">
@@ -27,8 +27,12 @@
         <div class="ending">
           <p></p>
           <div class="btns">
-            <button class="retry btn">再来一局</button>
-            <button class="more btn btn-warning  share_game " >分享挑战</button>
+              <?php if($href_type=="u2_msg" || $href_type=="group_msg") { ?>
+                <button class="retry btn">再来一局</button>
+                <button class="more btn btn-warning  share_game " >分享挑战</button>
+              <?php } else { ?>
+                <button class="retry btn retryBtn">再来一局</button>
+              <?php } ?>
               <input type="hidden" class="game-result" data-flag=""/>
           </div>
         </div>

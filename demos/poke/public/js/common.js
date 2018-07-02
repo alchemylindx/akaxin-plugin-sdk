@@ -1,15 +1,5 @@
 var btGame;~
 function(bt) {
-	bt.URL = {
-		root: "http://g.lanrenmb.com",
-		getMoreGame: function() {
-			bt.dc("more");
-			return "http://g.lanrenmb.com"
-		},
-		getConcern: function() {
-			return "http://g.lanrenmb.com"
-		},
-	};
 	bt.getGameId = function() {
 		var href = location.href;
 		href = href.slice(href.indexOf("://") + 3);
