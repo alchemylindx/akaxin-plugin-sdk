@@ -8,13 +8,18 @@
 html, body{
   font-size: 24px; 
   font-family: STXihei, "华文细黑", "Microsoft YaHei", "微软雅黑", Helvetica, Tahoma, Arial, sans-serif;
+  height:100%;
+  width:100%;
 }
 
 .engine {
-  margin: auto; 
+  margin: auto 0px;
   width: 21rem;
 }
-
+.engineDiv{
+  margin: auto 0px;
+  width: 21rem;
+}
 .status {
   margin: 0.5rem auto; 
 }

@@ -177,15 +177,14 @@ Game.prototype.updateTime = function() {
     }
     console.log("state ==" + this.state);
     var timeDiv = $(".current>span");
-    timeDiv.text("0.3");
 
-    // var time = new Date().getTime();
-    // time = (time - this.startTime) / 1000;
-    // if (time >= 99.9) {
-    //     time = 99.9;
-    //     this.loseGame()
-    // }
-    // timeDiv.text(time.toFixed(1))
+    var time = new Date().getTime();
+    time = (time - this.startTime) / 1000;
+    if (time >= 99.9) {
+        time = 99.9;
+        this.loseGame()
+    }
+    timeDiv.text(time.toFixed(1))
 };
 function Cell(div, x, y) {
     this.x = parseInt(x);
