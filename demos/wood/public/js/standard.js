@@ -278,7 +278,7 @@ function iShareGame(iquestion,idoit) {
     }
 
     document.getElementById('alert_content').innerHTML= html;
-
+    document.getElementById('alert_content').style.marginTop="45%";
     document.getElementById('alertbox').style.display='block';
 }
 

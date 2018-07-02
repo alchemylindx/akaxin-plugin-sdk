@@ -322,11 +322,10 @@ function gameover() {
         setCookie('stack_bestscore',stscore);
         document.getElementById('yourbest').innerHTML=stscore;
 
-
         theirbest=stscore;
-        iShareGame('<h1>游戏结束: '+stscore+'分</h1>厉害，你又破纪录了','restartgame();');
+        iShareGame('<h1 >游戏结束: '+stscore+'分</h1>厉害，你又破纪录了','restartgame();');
     } else {
-        iShareGame('<h1>游戏结束: '+stscore+'</h1>再来一次?','restartgame();');
+        iShareGame('<h1>游戏结束: '+stscore+'分</h1>再来一次?','restartgame();');
     }
     //urchinTracker('/stack/gamesplayed/');
     return false;

@@ -81,3 +81,9 @@ img {border:0;}
 }
 
 
+.alert_content_result{
+    text-align:center;
+    top: 120%;
+    transform: translateY(120%);
+    margin:0px auto;
+}
