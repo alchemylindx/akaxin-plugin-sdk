@@ -197,7 +197,7 @@ function(bt) {
 		wHeight = window.innerHeight;
 
         var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        var iw = (iOS) ? screen.width : window.innerWidth, ih = (iOS) ? screen.height-60 : window.innerHeight;
+        var iw = (iOS) ? screen.width : window.innerWidth, ih = (iOS) ? screen.height : window.innerHeight;
         return {
             width: iw,
             height: ih,
