@@ -192,12 +192,11 @@ var btGame;~
 function(bt) {
 	function rate(width, height) {
 
-
 		var wWidth = window.innerWidth,
 		wHeight = window.innerHeight;
 
         var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        var iw = (iOS) ? screen.width : window.innerWidth, ih = (iOS) ? screen.height : window.innerHeight;
+        var iw = screen.width, ih = screen.height;
         return {
             width: iw,
             height: ih,
