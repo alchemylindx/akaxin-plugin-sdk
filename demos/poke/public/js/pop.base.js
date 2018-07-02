@@ -38,6 +38,7 @@ var POP = {
     wave: { r: 50, x: -25, y: -40, total: null },
     ua: { mobile: null, browser: null, version: null, platform: null, scale: 1 },
 
+
     // store mouse / click coordinates
     m: {
         x: null,

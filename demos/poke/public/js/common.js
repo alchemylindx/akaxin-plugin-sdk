@@ -218,8 +218,8 @@ function(bt) {
 		var top = (wHeight - height) / 2,
 		left = (wWidth - width) / 2;
 		return {
-			width: width,
-			height: height,
+			width: window.innerWidth,
+			height: window.innerHeight,
 			top: top,
 			left: left
 		}

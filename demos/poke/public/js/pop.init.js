@@ -43,6 +43,7 @@ POP.init = function() {
 
     POP.input();
     POP.router();
+    POP.canvas.height = POP.H;
 
 };
 
