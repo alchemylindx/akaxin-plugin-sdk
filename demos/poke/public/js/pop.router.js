@@ -47,11 +47,11 @@ POP.splash = function() {
         POP.draw.text(20,POP.H - 20, 'This game is much more fun on touch devices', 11, 'rgba(255,255,255,0.5)');
     }*/
 
-    POP.draw.text(45,135,'戳泡泡！',64, 'rgba(0,0,0,0.3)');
-    POP.draw.text(40,130,'戳泡泡！',64);
-    POP.draw.text(110,240, POP.Ua.action + '开始游戏', 16, col);
-    POP.draw.text(128, 340, '最高分', 20, 'rgba(255,255,255,0.8)');
-    POP.draw.text("center", 380, POP.hiScore.toString(), 24, 'rgba(255,255,255,0.8)');
+    POP.draw.text(45,180,'戳泡泡！',64, 'rgba(0,0,0,0.3)');
+    POP.draw.text(40,180,'戳泡泡！',64);
+    POP.draw.text(110,290, POP.Ua.action + '开始游戏', 32, col);
+    POP.draw.text(128, 390, '最高分', 20, 'rgba(255,255,255,0.8)');
+    POP.draw.text("center", 430, POP.hiScore.toString(), 24, 'rgba(255,255,255,0.8)');
 
     if (POP.m.click && POP.delay > 20) {
         POP.textLayer.style.display = 'none';
@@ -74,22 +74,20 @@ POP.gameOver = function() {
 
     POP.delay += 1;
 
-    POP.draw.text(40,90,'Game Over',40, col);
+    POP.draw.text(40,140,'Game Over',40, col);
 
     // display scores
-	POP.draw.text(115,160,'泡泡数: '+POP.score.burst, 16, '#fff');
-    POP.draw.text(115,190,'精准度: ' + POP.score.accuracy + '%', 16, '#fff'); 
-    POP.draw.text(131,220,'时间: ' + POP.score.seconds, 16, '#fff'); 
-    POP.draw.text("center",270,'' + POP.score.total, 30, '#fff'); 
+	POP.draw.text(115,210,'泡泡数: '+POP.score.burst, 25, '#fff');
+    POP.draw.text(115,240,'精准度: ' + POP.score.accuracy + '%', 25, '#fff');
+    POP.draw.text(131,270,'时间: ' + POP.score.seconds, 25, '#fff');
+    POP.draw.text("center",320,'' + POP.score.total, 35, '#fff');
 
     document.getElementById("game_use_time").setAttribute("data", POP.score.seconds+"");
     document.getElementById("game_result").setAttribute("data", POP.score.burst+"");
     document.getElementById("game_accuracy").setAttribute("data",  POP.score.accuracy+"");
 
     if (POP.newHiscore) {
-        POP.draw.text('center', 310, '新记录!!!', 20, col2);
-
-        // POP.draw.text('center', 320, POP.score.total.toString(), 20, col2);
+        POP.draw.text('center', 360, '新记录!!!', 35, col2);
     }
 	// 绘画更多游戏
 	//POP.draw.rect(10, 330, 50, 20, "#fff")
@@ -134,7 +132,7 @@ POP.hiScores = function() {
         POP.state = 'splash';
     }
 
-    POP.draw.text('center',50,'Hi-Scores',40, '#fff');
+    POP.draw.text('center',100,'Hi-Scores',40, '#fff');
 
 };
 
@@ -212,7 +210,7 @@ POP.play = function() {
         var x_offset = Math.sin(POP.timer * 0.8) * 10;
         POP.draw.circle(
                     POP.wave.x + x_offset +  (i * POP.wave.r), 
-                    POP.wave.y, 
+                    POP.wave.y+50,
                     POP.wave.r, 
                     '#fff'); 
     }
@@ -220,7 +218,7 @@ POP.play = function() {
     // calculate score
     POP.score.seconds = ~~(( new Date().getTime() - POP.gameStart ) / 1000);
     POP.score.total = ~~( POP.score.seconds + (POP.score.burst * 10) );
-    POP.draw.text(20,40, POP.score.total.toString(), 22, '#fff');
+    POP.draw.text(20,90, POP.score.total.toString(), 22, '#fff');
 
 
     // draw lives

@@ -26,8 +26,6 @@ class Poke
     public $pluginHttpDomain = "http://192.168.3.43:5199"; ////需要修改成对应的扩展服务器地址
     public static $instance = null;
 
-    public $cssForWebmsg;
-
     public $dbHelper;
     public $zalyHelper;
     public $pluginId;

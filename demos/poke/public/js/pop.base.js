@@ -14,8 +14,8 @@ var POP = {
 
 	canvas: null, // html canvas object
 	ctx: null, // context for interacting with canvas
-	W: 320, // shortcut for canvas width
-	H: 480, // shortcut for canvas height
+	W: 480, // shortcut for canvas width
+	H: 960, // shortcut for canvas height
     offset: null, // offset from edge of screen to canvas
     debug: false,
     delay: 0,

@@ -22,7 +22,6 @@ POP.Starfish = function() {
 
     this.render = function() {
 
-
         if (this.y < 0) {
             this.reset();
             return;
@@ -60,7 +59,7 @@ POP.Starfish = function() {
     
         this.type = this.types[this.types_ref[Math.floor(Math.random() * this.types_ref.length)]];
         this.x = (Math.random() * (POP.W));
-        this.y = POP.H + (Math.random() * 100) + 100;
+        this.y = POP.H + (Math.random() * 100) + 100 ;
     
     };
 

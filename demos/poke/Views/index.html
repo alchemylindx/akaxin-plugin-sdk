@@ -37,7 +37,7 @@
     <canvas></canvas>
     <div id="textLayer">
         <p>
-           火爆朋友圈
+           阿卡信demo
         </p>
     </div>
     <div id="inputBox">
@@ -115,8 +115,6 @@
             var gameResult    = $("#game_result").attr("data");
             var gameAccuacy   =  $("#game_accuracy").attr("data");
             var chatSessionId = $('#chat_session_id').attr('data');
-
-            Zaly.tip(" gameResult =="+gameResult+" ");
             $.ajax({
                 type: "POST",
                 url:"<?php echo $http_domain;?>/index.php",
@@ -136,7 +134,7 @@
 			location.reload();
 		}
 	});
-	btGame.resizePlayArea($("#SF_Game"), 320, 480, "center", "center");
+	btGame.resizePlayArea($("#SF_Game"), 480, 960, "center", "center");
 	$("#SF_Game").on("resizePlayArea", function(){
 		SF_gameStart();
 		SF_gameStart = function(){};
