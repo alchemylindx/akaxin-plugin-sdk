@@ -49,7 +49,7 @@ function firstinit() {
 
 function init() {
     var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    var iw = ih = (iOS) ? screen.width:  window.innerWidth, ih = (iOS) ? screen.height:  window.innerHeight;
+    var iw = ih = (iOS) ? screen.width:  window.innerWidth, ih = (iOS) ? screen.height -70:  window.innerHeight;
 
     sah = ih;
 
@@ -135,7 +135,7 @@ function init() {
 function stack_init() {
 
     var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    var iw = ih = (iOS) ? screen.width:  window.innerWidth, ih = (iOS) ? screen.height:  window.innerHeight;
+    var iw = ih = (iOS) ? screen.width:  window.innerWidth, ih = (iOS) ? screen.height - 70:  window.innerHeight;
 
     if(ih>400) {
         if(sts>10) {
