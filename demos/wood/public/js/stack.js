@@ -9,7 +9,7 @@ extraleft[4]=5;
 extraright=10;
 var saw=308;
 var sah=247;
-var sahPercent=95;
+var sahPercent=130;
 var stdir;
 var stwidth=new Array();
 var stmargin=new Array();
@@ -66,7 +66,7 @@ function init() {
     tmp.style.position='absolute';
     tmp.style.width='320px';
     tmp.style.height='87px';
-    tmp.style.marginTop='95%';
+    tmp.style.marginTop='130%';
     tmp.style.zIndex='10';
     $('st_scrollarea').appendChild(tmp);
 
@@ -76,7 +76,7 @@ function init() {
     tmp.style.position='absolute';
     tmp.style.width='311px';
     tmp.style.height='39px';
-    tmp.style.marginTop='95%';
+    tmp.style.marginTop='130%';
     tmp.style.zIndex='20';
     $('st_scrollarea').appendChild(tmp);
 
@@ -86,7 +86,7 @@ function init() {
     tmp.id='stp_0';
     tmp.style.position='absolute';
     tmp.style.height=logh+'px';
-    tmp.style.marginTop="95%";
+    tmp.style.marginTop="130%";
     tmp.style.marginLeft=stmargin[0]-extraleft[sttype[0]]+7+'px';
     $('st_scrollarea').appendChild(tmp);
 
@@ -108,7 +108,7 @@ function init() {
     tmp.style.height='55px';
     tmp.style.padding='17px 11px 0 11px';
     tmp.style.zIndex='30';
-    tmp.style.margin='100% 0px';
+    tmp.style.margin='135% 0px';
     $('st_outerarea').appendChild(tmp);
 
 
