@@ -9,7 +9,7 @@ extraleft[4]=5;
 extraright=10;
 var saw=308;
 var sah=247;
-var sahPercent=85;
+var sahPercent=95;
 var stdir;
 var stwidth=new Array();
 var stmargin=new Array();
@@ -47,6 +47,49 @@ function firstinit() {
 }
 
 function init() {
+
+
+    tmp=document.createElement('div')
+    tmp.id='st_scrollarea';
+    var imgUrl = httpDomain+"/public/img/";
+
+    tmp.style.backgroundImage='url('+imgUrl+'/bg1250.png)';
+    tmp.style.backgroundPosition='bottom center';
+    tmp.style.width='320px';
+    tmp.style.height='100%';
+    tmp.style.position='absolute';
+    $('st_outerarea').appendChild(tmp);
+
+    tmp=document.createElement('div');
+    var imgUrl = httpDomain+"/public/img";
+    tmp.style.backgroundImage='url('+imgUrl+'/fuhatul.png)';
+    tmp.style.position='absolute';
+    tmp.style.width='320px';
+    tmp.style.height='87px';
+    tmp.style.marginTop='95%';
+    tmp.style.zIndex='10';
+    $('st_scrollarea').appendChild(tmp);
+
+    tmp=document.createElement('div');
+    var imgUrl = httpDomain+"/public/img";
+    tmp.style.backgroundImage='url('+imgUrl+'/fuelol.png)';
+    tmp.style.position='absolute';
+    tmp.style.width='311px';
+    tmp.style.height='39px';
+    tmp.style.marginTop='95%';
+    tmp.style.zIndex='20';
+    $('st_scrollarea').appendChild(tmp);
+
+    tmp2=Math.floor(Math.random()*4)+1;
+
+    tmp=document.createElement('div');
+    tmp.id='stp_0';
+    tmp.style.position='absolute';
+    tmp.style.height=logh+'px';
+    tmp.style.marginTop="95%";
+    tmp.style.marginLeft=stmargin[0]-extraleft[sttype[0]]+7+'px';
+    $('st_scrollarea').appendChild(tmp);
+
     tmp=document.createElement('div');
     tmp.style.position='absolute';
     tmp.style.cursor='pointer';
@@ -65,50 +108,12 @@ function init() {
     tmp.style.height='55px';
     tmp.style.padding='17px 11px 0 11px';
     tmp.style.zIndex='30';
-    tmp.style.margin='90% 0 10px 0';
+    tmp.style.margin='100% 0px';
     $('st_outerarea').appendChild(tmp);
 
-    tmp=document.createElement('div')
-    tmp.id='st_scrollarea';
-    var imgUrl = httpDomain+"/public/img/";
 
-    tmp.style.backgroundImage='url('+imgUrl+'/bg1250.png)';
-    tmp.style.backgroundPosition='bottom center';
-    tmp.style.width='320px';
-    tmp.style.height='315px';
-    tmp.style.position='absolute';
-    $('st_outerarea').appendChild(tmp);
-
-    tmp=document.createElement('div');
-    var imgUrl = httpDomain+"/public/img";
-    tmp.style.backgroundImage='url('+imgUrl+'/fuhatul.png)';
-    tmp.style.position='absolute';
-    tmp.style.width='320px';
-    tmp.style.height='87px';
-    tmp.style.marginTop='85%';
-    tmp.style.zIndex='10';
-    $('st_scrollarea').appendChild(tmp);
-
-    tmp=document.createElement('div');
-    var imgUrl = httpDomain+"/public/img";
-    tmp.style.backgroundImage='url('+imgUrl+'/fuelol.png)';
-    tmp.style.position='absolute';
-    tmp.style.width='311px';
-    tmp.style.height='39px';
-    tmp.style.marginTop='85%';
-    tmp.style.zIndex='20';
-    $('st_scrollarea').appendChild(tmp);
-
-    tmp2=Math.floor(Math.random()*4)+1;
-
-    tmp=document.createElement('div');
-    tmp.id='stp_0';
-    tmp.style.position='absolute';
-    tmp.style.height=logh+'px';
-    tmp.style.marginTop="85%";
-    tmp.style.marginLeft=stmargin[0]-extraleft[sttype[0]]+7+'px';
-    $('st_scrollarea').appendChild(tmp);
     showaronk('stp_0',sttype[0],ststart[0],stwidth[0]);
+
     //addshadow();
     console.log("add wood init");
     stack_init();

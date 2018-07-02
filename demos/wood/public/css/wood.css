@@ -61,3 +61,12 @@ img {border:0;}
     text-decoration: none;
     display: inline-block;
 }
+
+#alert_content{
+    text-align:center;
+    top: 50%;
+    transform: translateY(50%);
+    margin:0px auto;
+}
+
+
