@@ -138,13 +138,13 @@ function stack_init() {
     var iw = ih = (iOS) ? screen.width:  window.innerWidth, ih = (iOS) ? screen.height:  window.innerHeight;
 
     if(ih>400) {
-        if(sts>7) {
-            paddingtarget=(sts-7)*(logh-4);
-            if(sts > 12) {
-                $('st_scrollarea').removeChild($('stp_'+(sts-13)));
-                if(sts % 2 == 0 && sts>13) {
+        if(sts>10) {
+            paddingtarget=(sts-10)*(logh-4);
+            if(sts > 15) {
+                $('st_scrollarea').removeChild($('stp_'+(sts-16)));
+                if(sts % 2 == 0 && sts>16) {
                     try {
-                        $('st_scrollarea').removeChild($('shd_'+(sts-13)));
+                        $('st_scrollarea').removeChild($('shd_'+(sts-16)));
                     }
                     catch(error) {
                         console.error(error);

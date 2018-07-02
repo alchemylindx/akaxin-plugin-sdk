@@ -72,7 +72,7 @@ class AkaxinReferer {
 
     // 获取SessionID，用于向Site获取用户资料
     public function getAkaxinSessionId() {
-        return $_COOKIE["akaxin_site_session_id"];
+        return isset($_COOKIE["akaxin_site_session_id"]) ? $_COOKIE["akaxin_site_session_id"] : "";
     }
 
     // 返回自定义启动参数
