@@ -62,12 +62,11 @@ img {border:0;}
     display: inline-block;
 }
 
-
 .woodBtn{
     border-radius: 8px;
     padding: 10px 48px;
     font-size: 10px;
-    background-color: #4CAF50;
+    background-color: #008CBA;
     border: none;
     text-align: center;
     text-decoration: none;

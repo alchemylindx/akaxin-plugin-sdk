@@ -120,11 +120,18 @@ function init() {
 }
 
 function stack_init() {
-    if(sts>10) {
-        paddingtarget=(sts-10)*(logh-4);
-        if(sts > 15) {
-            $('st_scrollarea').removeChild($('stp_'+(sts-16)));
-            if(sts % 2 == 0 && sts>16) {   $('st_scrollarea').removeChild($('shd_'+(sts-16)));}
+    if(sts>7) {
+        paddingtarget=(sts-7)*(logh-4);
+        if(sts > 12) {
+            $('st_scrollarea').removeChild($('stp_'+(sts-13)));
+            if(sts % 2 == 0 && sts>13) {
+                try {
+                    $('st_scrollarea').removeChild($('shd_'+(sts-13)));
+                }
+                catch(error) {
+                    console.error(error);
+                }
+            }
         }
     }
 
