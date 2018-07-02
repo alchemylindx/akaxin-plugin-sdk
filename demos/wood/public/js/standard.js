@@ -282,8 +282,6 @@ function iShareGame(iquestion,idoit) {
     document.getElementById('alertbox').style.display='block';
 }
 
-
-
 function getCookie(Name) {
   var search = Name + "="
   if (document.cookie.length > 0) {
