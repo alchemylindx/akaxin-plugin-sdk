@@ -38,3 +38,26 @@ img {border:0;}
 #preload {width:320px;position:absolute; visibility:hidden; overflow:hidden;}
 
 #st_outerarea{width:320px;height: 100%; overflow:hidden; position: relative;}
+
+.woodBtnConfrim{
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 10px;
+    background-color: #008CBA;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.woodBtnShare{
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 10px;
+    background-color: #4CAF50;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
