@@ -191,38 +191,48 @@ function(bt) {
 var btGame;~
 function(bt) {
 	function rate(width, height) {
+
+
 		var wWidth = window.innerWidth,
 		wHeight = window.innerHeight;
-		var mid;
-		if (width <= wWidth && height <= wHeight) {} else if (width > wWidth && height > wHeight) {
-			var rateW = wWidth / width,
-			rateH = wHeight / height;
-			if (rateW <= rateH) {
-				mid = width;
-				width = wWidth;
-				height = height * width / mid
-			} else {
-				mid = height;
-				height = wHeight;
-				width = width * height / mid
-			}
-		} else if (width > wWidth) {
-			mid = width;
-			width = wWidth;
-			height = height * wWidth / mid
-		} else if (height > wHeight) {
-			mid = height;
-			height = wHeight;
-			width = width * wHeight / mid
-		} else {};
-		var top = (wHeight - height) / 2,
-		left = (wWidth - width) / 2;
-		return {
-			width: window.innerWidth,
-			height: window.innerHeight,
-			top: top,
-			left: left
-		}
+
+        return {
+            width: window.innerWidth,
+            height: window.innerHeight<415? 415: window.innerHeight,
+            top: 0,
+            left: 0
+        }
+
+		// var mid;
+		// if (width <= wWidth && height <= wHeight) {} else if (width > wWidth && height > wHeight) {
+		// 	var rateW = wWidth / width,
+		// 	rateH = wHeight / height;
+		// 	if (rateW <= rateH) {
+		// 		mid = width;
+		// 		width = wWidth;
+		// 		height = height * width / mid
+		// 	} else {
+		// 		mid = height;
+		// 		height = wHeight;
+		// 		width = width * height / mid
+		// 	}
+		// } else if (width > wWidth) {
+		// 	mid = width;
+		// 	width = wWidth;
+		// 	height = height * wWidth / mid
+		// } else if (height > wHeight) {
+		// 	mid = height;
+		// 	height = wHeight;
+		// 	width = width * wHeight / mid
+		// } else {};
+		// var top = (wHeight - height) / 2,
+		// left = (wWidth - width) / 2;
+		// return {
+		// 	width: window.innerWidth,
+		// 	height: window.innerHeight,
+		// 	top: 0,
+		// 	left: 0
+		// }
 	};
 	function resize($elem, width, height, top, left) {
 		var result = rate(width, height);

@@ -32,14 +32,14 @@ POP.Starfish = function() {
 
         this.y += this.speed;
 
-        POP.draw.circle(this.x, this.y, this.inner_r, this.type.inner);
+        POP.draw.circle(this.x, this.y+ 100, this.inner_r, this.type.inner);
 
         for (i = 0; i < this.points; i += 1) {
 
             x = this.offset * Math.cos(this.angle) + (this.x);
             y = this.offset * Math.sin(this.angle) + (this.y);
 
-            POP.draw.circle(x, y, this.inner_r / 2, (this.type.outer));
+            POP.draw.circle(x, y + 100, this.inner_r / 2, (this.type.outer));
                 
             this.angle += this.increase;
         }
