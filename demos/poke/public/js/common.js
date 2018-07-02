@@ -198,11 +198,10 @@ function(bt) {
 
         var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         var iw = (iOS) ? screen.width : window.innerWidth, ih = (iOS) ? screen.height-60 : window.innerHeight;
-        var itop =  (iOS) ? 60 : 0;
         return {
             width: iw,
             height: ih,
-            top: itop,
+            top: 0,
             left: 0
         }
 
