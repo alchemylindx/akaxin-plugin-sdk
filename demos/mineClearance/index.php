@@ -59,7 +59,7 @@ class MineClearance
     public function render($fileName, $params = [])
     {
         ob_start();
-        $path = dirname(__DIR__)."/".basename(__DIR__).'/Views/'.$fileName.'.html';
+        $path = dirname(__DIR__)."/".basename(__DIR__).'/views/'.$fileName.'.html';
         if ($params) {
             extract($params, EXTR_SKIP);
         }
