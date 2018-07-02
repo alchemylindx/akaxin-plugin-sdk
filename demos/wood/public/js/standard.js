@@ -277,10 +277,16 @@ function iShareGame(iquestion,idoit) {
          html += '<button class="woodBtnShare" href="#" ontouchstart="iShare(); return false;" onclick="iShare(); return false;" >分享战绩</button>';
     }
 
+    var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    var iw = ih = (iOS) ? screen.width:  window.innerWidth, ih = (iOS) ? screen.height:  window.innerHeight;
+
+
     document.getElementById('alert_content').innerHTML= html;
-    document.getElementById('alert_content').style.marginTop="45%";
+    document.getElementById('alert_content').style.marginTop=ih*0.3+"px";
     document.getElementById('alertbox').style.display='block';
 }
+
+
 
 function getCookie(Name) {
   var search = Name + "="

@@ -10,6 +10,7 @@ extraright=10;
 var saw=308;
 var sah=247;
 var sahPercent=130;
+var btnHeight=55;
 var stdir;
 var stwidth=new Array();
 var stmargin=new Array();
@@ -47,11 +48,20 @@ function firstinit() {
 }
 
 function init() {
+    var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    var iw = ih = (iOS) ? screen.width:  window.innerWidth, ih = (iOS) ? screen.height:  window.innerHeight;
 
+    sah = ih;
+
+    $('st_outerarea').style.height= ih+"px";
+    $('st_outerarea').style.width= iw+"px";
 
     tmp=document.createElement('div')
     tmp.id='st_scrollarea';
     var imgUrl = httpDomain+"/public/img/";
+
+    var wWidth = window.innerWidth,
+        wHeight = window.innerHeight;
 
     tmp.style.backgroundImage='url('+imgUrl+'/bg1250.png)';
     tmp.style.backgroundPosition='bottom center';
@@ -76,7 +86,8 @@ function init() {
     tmp.style.position='absolute';
     tmp.style.width='311px';
     tmp.style.height='39px';
-    tmp.style.marginTop='130%';
+    // tmp.style.marginTop='130%';
+    tmp.style.marginTop = (ih-logh)+"px";
     tmp.style.zIndex='20';
     $('st_scrollarea').appendChild(tmp);
 
@@ -86,7 +97,8 @@ function init() {
     tmp.id='stp_0';
     tmp.style.position='absolute';
     tmp.style.height=logh+'px';
-    tmp.style.marginTop="130%";
+    // tmp.style.marginTop="130%";
+    tmp.style.marginTop=sah-btnHeight-logh+'px';
     tmp.style.marginLeft=stmargin[0]-extraleft[sttype[0]]+7+'px';
     $('st_scrollarea').appendChild(tmp);
 
@@ -108,7 +120,8 @@ function init() {
     tmp.style.height='55px';
     tmp.style.padding='17px 11px 0 11px';
     tmp.style.zIndex='30';
-    tmp.style.margin='135% 0px';
+    tmp.style.margin='0px';
+    tmp.style.marginTop=ih-btnHeight+"px";
     $('st_outerarea').appendChild(tmp);
 
 
@@ -120,16 +133,37 @@ function init() {
 }
 
 function stack_init() {
-    if(sts>7) {
-        paddingtarget=(sts-7)*(logh-4);
-        if(sts > 12) {
-            $('st_scrollarea').removeChild($('stp_'+(sts-13)));
-            if(sts % 2 == 0 && sts>13) {
-                try {
-                    $('st_scrollarea').removeChild($('shd_'+(sts-13)));
+
+    var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    var iw = ih = (iOS) ? screen.width:  window.innerWidth, ih = (iOS) ? screen.height:  window.innerHeight;
+
+    if(ih>400) {
+        if(sts>7) {
+            paddingtarget=(sts-7)*(logh-4);
+            if(sts > 12) {
+                $('st_scrollarea').removeChild($('stp_'+(sts-13)));
+                if(sts % 2 == 0 && sts>13) {
+                    try {
+                        $('st_scrollarea').removeChild($('shd_'+(sts-13)));
+                    }
+                    catch(error) {
+                        console.error(error);
+                    }
                 }
-                catch(error) {
-                    console.error(error);
+            }
+        }
+    } else {
+        if(sts>3) {
+            paddingtarget=(sts-3)*(logh-4);
+            if(sts > 8) {
+                $('st_scrollarea').removeChild($('stp_'+(sts-9)));
+                if(sts % 2 == 0 && sts>9) {
+                    try {
+                        $('st_scrollarea').removeChild($('shd_'+(sts-9)));
+                    }
+                    catch(error) {
+                        console.error(error);
+                    }
                 }
             }
         }
@@ -149,7 +183,9 @@ function stack_init() {
     tmp.style.height=logh+'px';
     tmp.style.width=extraleft[sttype[sts]]+stwidth[sts]+extraright/2+'px';
     // tmp.style.marginTop=sah-(sts+2)*(logh-4);
-    tmp.style.marginTop=(sahPercent-sts*(loghPercent)-3)+"%";
+    // tmp.style.marginTop=(sahPercent-sts*(loghPercent)-3)+"%";
+    tmp.style.marginTop=sah-(sts+2)*(logh-4)-btnHeight+"px";
+
     console.log(" log percent =="+(sahPercent-sts*(loghPercent)));
     tmp.style.marginLeft=stmargin[sts]-extraleft[sttype[sts]]+7+'px';
     $('st_scrollarea').appendChild(tmp);
@@ -201,14 +237,17 @@ function handleclick() {
         tmp.style.backgroundColor='#333333';
         tmp.style.marginLeft='85px';
         // tmp3=(sah-(sts+2)*(logh-4)-16);
-        tmp3 = (sahPercent-sts*(loghPercent));
-        tmp.style.marginTop=tmp3+"%";
+        // tmp3 = (sahPercent-sts*(loghPercent));
+        tmp3=(sah-(sts+2)*(logh-4)-16)-btnHeight;
+
+
+        tmp.style.marginTop=tmp3+"px";
         $('st_scrollarea').appendChild(tmp);
         tmp2=new Array();
         tmp2[0]="";
-        tmp2[1]="$('score_title').style.color='#ffffff'; $('box_perfect').style.marginTop='"+(tmp3-5)+"%';";
-        tmp2[2]="$('box_perfect').style.marginTop='"+(tmp3-10)+"%';";
-        tmp2[3]="$('box_perfect').style.marginTop='"+(tmp3-15)+"%';";
+        tmp2[1]="$('score_title').style.color='#ffffff'; $('box_perfect').style.marginTop='"+(tmp3-5)+"px';";
+        tmp2[2]="$('box_perfect').style.marginTop='"+(tmp3-10)+"px';";
+        tmp2[3]="$('box_perfect').style.marginTop='"+(tmp3-15)+"px';";
         tmp2[4]="$('st_scrollarea').removeChild($('box_perfect')); $('score_title').style.color=''";
         ttt=Math.random();
         stispace[ttt]=tmp2;
@@ -232,7 +271,9 @@ function addshadow() {
     tmp.style.height='30px';
     tmp.style.marginLeft=(stmargin[sts]-extraleft[sttype[sts]]+7)+'px';
     // tmp.style.marginTop=(sah-(sts+1)*(logh-4)-1)+'px';
-    tmp.style.marginTop=(sahPercent-sts*(loghPercent))+'%';
+    // tmp.style.marginTop=(sahPercent-sts*(loghPercent))+'%';
+    tmp.style.marginTop=sah-(sts+1)*(logh-4)-1-btnHeight+'px';
+
     $('st_scrollarea').appendChild(tmp);
 }
 
@@ -257,7 +298,7 @@ function cutaronk(crid,crtype,crstart,crstays,crfrom) {
     if(crfrom !='') {
         tmp=new Array();
         if(crfrom == 'left' || crfrom == 'right') {
-            tmp[0]="$('"+crid+"').style.marginTop='"+((sahPercent-sts*(loghPercent)))+"%';document.getElementById('"+crid+"').childNodes[1].style.marginTop='2px';  document.getElementById('"+crid+"').childNodes[0].style.zIndex="+((sts % 2)?(13):(16))+";";
+            tmp[0]="$('"+crid+"').style.marginTop='"+(sah-(sts+1)*(logh-4)-btnHeight)+"px';document.getElementById('"+crid+"').childNodes[1].style.marginTop='2px';  document.getElementById('"+crid+"').childNodes[0].style.zIndex="+((sts % 2)?(13):(16))+";";
             tmp[1]="$('"+crid+"').childNodes[1].style.opacity='.75'; $('"+crid+"').childNodes[1].style.marginTop='7px';";
             tmp[2]="$('"+crid+"').childNodes[1].style.opacity='.5';$('"+crid+"').childNodes[1].style.marginTop='12px';";
             tmp[3]="$('"+crid+"').childNodes[1].style.opacity='.25';$('"+crid+"').childNodes[1].style.marginTop='17px';";
@@ -274,7 +315,7 @@ function cutaronk(crid,crtype,crstart,crstays,crfrom) {
         stispace[ttt]=tmp;
         setTI(ttt,50);
     } else {
-        document.getElementById(crid).style.marginTop=((sahPercent-sts*(loghPercent)))+'%';  document.getElementById(crid).childNodes[0].style.zIndex=((sts % 2)?(13):(16));
+        document.getElementById(crid).style.marginTop=(sah-(sts+1)*(logh-4)-btnHeight)+'px';  document.getElementById(crid).childNodes[0].style.zIndex=((sts % 2)?(13):(16));
         stack_init();
     }
 }
