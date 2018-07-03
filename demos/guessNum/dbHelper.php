@@ -13,7 +13,7 @@ class DBHelper
     {
         $conf = getConf();
         $this->dbName = "openzaly_guessNum_{$conf["db_safe_prefix"]}.db";
-        $this->db = new \PDO("sqlite:./".$this->dbName);
+        $this->db = new \PDO("sqlite:{$conf["db_path"]}/".$this->dbName);
         $config  = getConf();
         $this->expirtTime = $config['game_expire_time'];
     }

@@ -12,7 +12,7 @@ class DBHelper
     {
         $conf = getConf();
         $this->dbName = "openzaly_wood_{$conf["db_safe_prefix"]}.db";
-        $this->db = new \PDO("sqlite:./".$this->dbName);
+        $this->db = new \PDO("sqlite:{$conf["db_path"]}/".$this->dbName);
         $this->checkDBExists();
     }
 
