@@ -16,6 +16,7 @@ class DBHelper
         $dbInfo = $config["db_path"]."/".$this->dbName;
         $this->db = new \PDO("sqlite:{$dbInfo}");
         $this->expirtTime = $config['game_expire_time'];
+        $this->checkDBExists();
     }
 
     public static function getInstance($config)

@@ -10,8 +10,8 @@ $conf = [
         "site_address" => "192.168.3.43:2022",
 
         // PluginApiServer
-        "plugin_id" => 6, //plugin id, 请在管理平台 -> 扩展管理 -> 点击对应扩展获取
-        "plugin_auth_key" => "rbrQmF7eExcRxoJX",
+        "plugin_id" => 8, //plugin id, 请在管理平台 -> 扩展管理 -> 点击对应扩展获取
+        "plugin_auth_key" => "noGMU7fNzueSTdnQ",
         "plugin_api_host" => "127.0.0.1",    // 对应启动服务器时的 -Dhttp.address 参数
         "plugin_api_port" => 8280,  // 对应启动服务器时的 -Dhttp.port 参数
 

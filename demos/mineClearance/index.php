@@ -43,10 +43,10 @@ class MineClearance
      *
      * @author 尹少爷 2018.6.13
      */
-    public static function getInstance()
+    public static function getInstance($configName)
     {
         if(!self::$instance) {
-            self::$instance = new MineClearance();
+            self::$instance = new MineClearance($configName);
         }
         return self::$instance;
     }

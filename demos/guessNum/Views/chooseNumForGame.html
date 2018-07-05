@@ -48,6 +48,7 @@
     <input type="hidden" class="is_sponsor" data="<?php echo $is_sponsor;?>">
     <input type="hidden" class="game_type" data="<?php echo $game_type;?>">
     <input type="hidden" class="game_num" data="<?php echo $game_num;?>">
+    <input type="hidden" class="config_name" data="<?php echo $config_name;?>">
 
 </div>
 
@@ -62,14 +63,25 @@
 
     $(document).on("click", ".guess_num", function(){
 
-        var gameNum   = $('.game_num').attr('data');
+        var gameNum    = $('.game_num').attr('data');
+        var configName = $('.config_name').attr('data');
+
         var guessNum  = $(this).attr('guess-num');
         var obj = $(this);
 
         $.ajax({
             method: "POST",
             url:"<?php echo $http_domain;?>/index.php",
-            data: { page_type: "four", chat_session_id : chatSesssionId , href_type:hrefType, guess_num:guessNum, is_sponsor:isSponsor, game_type:gameType, game_num:gameNum},
+            data: {
+                page_type: "four",
+                chat_session_id : chatSesssionId,
+                href_type:hrefType,
+                guess_num:guessNum,
+                is_sponsor:isSponsor,
+                game_type:gameType,
+                game_num:gameNum,
+                config_name:configName
+            },
             success:function (data) {
                 if(data.length>1) {
                     var results = JSON.parse(data);
