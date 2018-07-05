@@ -27,5 +27,5 @@ $conf = [
 ];
 function getConf($confName) {
     global $conf;
-    return $conf[$confName];
+    return isset($conf[$confName]) ? $conf[$confName] : $conf['default'];
 }

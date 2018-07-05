@@ -4,6 +4,7 @@ $conf = [
     'default' => [
         // 扩展服务器WEB地址，用以加载静态文件的根目录
         "plugin_http_domain" => "http://192.168.3.43:5188",
+        "plugin_http_domain" => "http://192.168.1.102:5188",
 
         // 用户在客户端访问站点的地址
         "site_address" => "192.168.3.43:2022",
@@ -24,7 +25,7 @@ $conf = [
     ],
 ];
 
-function getConf($confName) {
+function getConf($configName) {
     global $conf;
-    return $conf[$confName];
+    return isset($conf[$configName]) ? $conf[$configName] : $conf['default'];
 }

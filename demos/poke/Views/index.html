@@ -62,6 +62,8 @@
 
     <input type="hidden" id="chat_session_id" data="<?php echo $chat_session_id;?>">
     <input type="hidden" id="href_type" data="<?php echo $href_type;?>">
+    <input type="hidden" id="config_name" data="<?php echo $config_name;?>">
+
     <input type="hidden" id="game_use_time" data="">
     <input type="hidden" id="game_result" data="">
     <input type="hidden" id="game_accuracy" data="">
@@ -101,12 +103,21 @@
             var gameResult    = $("#game_result").attr("data");
             var gameAccuacy   =  $("#game_accuracy").attr("data");
             var chatSessionId = $('#chat_session_id').attr('data');
+            var configName    = $('#config_name').attr('data');
 
             $.ajax({
                 type: "POST",
                 url:"<?php echo $http_domain;?>/index.php",
                 dataType:"JSON",
-                data: { page_type: "game_record", chat_session_id : chatSessionId , href_type:hrefType, game_use_time:gameUseTime+"s" , game_result:gameResult, game_accuracy:gameAccuacy},
+                data: {
+                    page_type: "game_record",
+                    chat_session_id : chatSessionId,
+                    href_type:hrefType,
+                    game_use_time:gameUseTime+"s",
+                    game_result:gameResult,
+                    game_accuracy:gameAccuacy,
+                    config_name:configName
+                },
                 success:function (data) {
 
                 },
@@ -122,12 +133,21 @@
             var gameResult    = $("#game_result").attr("data");
             var gameAccuacy   =  $("#game_accuracy").attr("data");
             var chatSessionId = $('#chat_session_id').attr('data');
+            var configName    = $('#config_name').attr('data');
 
             $.ajax({
                 type: "POST",
                 url:"<?php echo $http_domain;?>/index.php",
                 dataType:"JSON",
-                data: { page_type: "game_record", chat_session_id : chatSessionId , href_type:hrefType, game_use_time:gameUseTime+"s" , game_result:gameResult, game_accuracy:gameAccuacy},
+                data: {
+                    page_type: "game_record",
+                    chat_session_id : chatSessionId,
+                    href_type:hrefType,
+                    game_use_time:gameUseTime+"s",
+                    game_result:gameResult,
+                    game_accuracy:gameAccuacy,
+                    config_name:configName
+                },
                 success:function (data) {
 
                 },
@@ -144,11 +164,21 @@
             var gameResult    = $("#game_result").attr("data");
             var gameAccuacy   =  $("#game_accuracy").attr("data");
             var chatSessionId = $('#chat_session_id').attr('data');
+            var configName    = $('#config_name').attr('data');
+
             $.ajax({
                 type: "POST",
                 url:"<?php echo $http_domain;?>/index.php",
                 dataType:"JSON",
-                data: { page_type: "share_game", chat_session_id : chatSessionId , href_type:hrefType, game_use_time:gameUseTime+"s" , game_result:gameResult, game_accuracy:gameAccuacy},
+                data: {
+                    page_type: "share_game",
+                    chat_session_id : chatSessionId,
+                    href_type:hrefType,
+                    game_use_time:gameUseTime+"s",
+                    game_result:gameResult,
+                    game_accuracy:gameAccuacy,
+                    config_name:configName
+                },
                 success:function (data) {
 
                 },

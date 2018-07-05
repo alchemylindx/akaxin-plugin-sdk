@@ -14,7 +14,7 @@ require_once(__DIR__ . "/../../sdk-php/AkaxinPluginApiClient.php");
 
 require_once(__DIR__ . "/config.php");
 require_once(__DIR__ . "/dbHelper.php");
-require_once(__DIR__ . "/../zalyHelper.php");
+require_once(__DIR__ . "/../helper/zalyHelper.php");
 
 
 class GuessNum
@@ -56,6 +56,7 @@ class GuessNum
     {
 
         $config = getConf($configName);
+        var_export($config);
         $this->pluginId = $config['plugin_id'];
         $this->siteAddress = $config['site_address'];
         $this->pluginHttpDomain = $config['plugin_http_domain'];
@@ -471,6 +472,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
 }
 $guessNumObj =  GuessNum::getInstance($configName);
 $guessNumObj->checkoutDB();
+    exit;
 
 $pageType  = isset($_GET['page_type']) ? $_GET['page_type'] : "first";
 $gameType  = isset($_GET['game_type']) ? $_GET['game_type'] : 4;
