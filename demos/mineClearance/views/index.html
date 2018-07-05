@@ -20,6 +20,8 @@
           <div class="current panel ">当前用时 <span class="use_time">0.3</span> s</div>
           <input type="hidden" class="chat_session_id" data="<?php echo $chat_session_id;?>">
           <input type="hidden"  id="href_type" class="href_type" data="<?php echo $href_type;?>">
+          <input type="hidden"  id="config_name" class="config_name" data="<?php echo $config_name;?>">
+
       </div>
 
       <div class="game panel">
@@ -51,10 +53,11 @@
             var useTime  = $("span").text();
             var chatSesssionId = $('.chat_session_id').attr('data');
             var gameResult = $(".game-result").attr("data-flag");
+            var configName = $('.config_name').attr("data");
             $.ajax({
                 type: "POST",
                 url:"<?php echo $http_domain;?>/index.php",
-                data: { page_type: "share_fail", chat_session_id : chatSesssionId , href_type:hrefType, use_time:useTime+"s" , game_type:gameResult},
+                data: { page_type: "share_fail", chat_session_id : chatSesssionId , href_type:hrefType, use_time:useTime+"s" , game_type:gameResult, config_name:configName},
                 success:function (data) {
 
                 },
@@ -69,10 +72,12 @@
             var useTime  = $("span").text();
             var chatSesssionId = $('.chat_session_id').attr('data');
             var gameResult = $(".game-result").attr("data-flag");
+            var configName = $('.config_name').attr("data");
+
             $.ajax({
                 type: "POST",
                 url:"<?php echo $http_domain;?>/index.php",
-                data: { page_type: "record", chat_session_id : chatSesssionId , href_type:hrefType, use_time:useTime+"s", game_type:gameResult},
+                data: { page_type: "record", chat_session_id : chatSesssionId , href_type:hrefType, use_time:useTime+"s", game_type:gameResult, config_name:configName},
                 success:function (data) {
                 },
                 fail:function (data) {

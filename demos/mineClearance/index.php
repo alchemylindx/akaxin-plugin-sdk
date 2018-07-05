@@ -8,7 +8,7 @@
 require_once(__DIR__ . "/../../sdk-php/AkaxinPluginApiClient.php");
 require_once(__DIR__ . "/config.php");
 require_once(__DIR__ . "/dbHelper.php");
-require_once(__DIR__ . "/zalyHelper.php");
+require_once(__DIR__ . "/../zalyHelper.php");
 
 class MineClearance
 {
@@ -28,14 +28,14 @@ class MineClearance
     public $dbHelper;
     public $zalyHelper;
     public $pluginId;
-    public function __construct()
+    public function __construct($configName)
     {
-        $this->dbHelper   = DBHelper::getInstance();
-        $this->zalyHelper = ZalyHelper::getInstance();
-        $config = getConf();
+        $config = getConf($configName);
         $this->pluginId = $config['plugin_id'];
         $this->siteAddress = $config['site_address'];
         $this->pluginHttpDomain = $config['plugin_http_domain'];
+        $this->dbHelper   = DBHelper::getInstance($config);
+        $this->zalyHelper = ZalyHelper::getInstance($config);
     }
 
     /**
@@ -316,12 +316,16 @@ eot;
     }
 }
 
-$mineClearance = MineClearance::getInstance();
+$configName = isset($_GET['config_name']) ? $_GET['config_name'] : "default";
+if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
+    $configName = isset($_POST['config_name']) ? $_POST['config_name'] : "default";
+}
+
+$mineClearance = MineClearance::getInstance($configName);
 $pageType    = isset($_GET['page_type']) ? $_GET['page_type'] : "first";
 $httpReferer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 
 $urlParams = $mineClearance->parseUrl($httpReferer);
-//return ['chat_session_id' => $chatSessionId, 'href_type' => $hrefType, 'akaxin_param' => $akaxinReferer->getAkaxinParam()];
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
     $pageType  = isset($_POST['page_type']) ? $_POST['page_type'] : "share_fail";
     $hrefType  = isset($_POST['href_type']) ? $_POST['href_type'] : "";
@@ -329,15 +333,13 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
     $siteSessionId = $urlParams['site_session_id'];
     $time = isset($_POST['use_time']) ? $_POST['use_time']:"";
     $gameType = isset($_POST['game_type'])?$_POST['game_type'] : "unknow";
-    error_log(" time ==".$time);
-    error_log(" gameType ==".$gameType);
-
 }
 switch ($pageType) {
     case "first":
         $urlParams['http_domain'] = $mineClearance->pluginHttpDomain;
         $urlParams['suffix'] = "?".time();
-        $urlParams['href_url'] = $mineClearance->pluginHttpDomain."/index.php?chat_session_id=".$urlParams['chat_session_id']."&href_type=".$urlParams['href_type'];
+        $urlParams['config_name'] = $configName;
+        $urlParams['href_url'] = $mineClearance->pluginHttpDomain."/index.php?&configName=".$configName."&chat_session_id=".$urlParams['chat_session_id']."&href_type=".$urlParams['href_type'];
         echo $mineClearance->render("index", $urlParams);
         break;
 

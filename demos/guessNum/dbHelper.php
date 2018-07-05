@@ -9,19 +9,19 @@ class DBHelper
     public $expirtTime = 10*60;//10分钟过期
     public static $instance = null;
 
-    protected function __construct()
+    protected function __construct($config)
     {
-        $conf = getConf();
-        $this->dbName = "openzaly_guessNum_{$conf["db_safe_prefix"]}.db";
-        $this->db = new \PDO("sqlite:{$conf["db_path"]}/".$this->dbName);
-        $config  = getConf();
+        $siteAddress  = str_replace([":", "."], ["_", "_"], $config["site_address"]);
+        $this->dbName = "openzaly_clearance_{$siteAddress}_{$config["plugin_id"]}_{$config["db_safe_prefix"]}.db";
+        $dbInfo = $config["db_path"]."/".$this->dbName;
+        $this->db = new \PDO("sqlite:{$dbInfo}");
         $this->expirtTime = $config['game_expire_time'];
     }
 
-    public static function getInstance()
+    public static function getInstance($config)
     {
         if(!self::$instance) {
-            self::$instance = new DBHelper();
+            self::$instance = new DBHelper($config);
         }
         return self::$instance;
     }

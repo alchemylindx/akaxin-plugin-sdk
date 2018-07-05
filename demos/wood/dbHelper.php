@@ -8,21 +8,23 @@ class DBHelper
     public $groupType  = "group_msg";
     public static $instance = null;
 
-    protected function __construct()
+    protected function __construct($config)
     {
-        $conf = getConf();
-        $this->dbName = "openzaly_wood_{$conf["db_safe_prefix"]}.db";
-        $this->db = new \PDO("sqlite:{$conf["db_path"]}/".$this->dbName);
+        $siteAddress  = str_replace([":", "."], ["_", "_"], $config["site_address"]);
+        $this->dbName = "openzaly_clearance_{$siteAddress}_{$config["plugin_id"]}_{$config["db_safe_prefix"]}.db";
+        $dbInfo = $config["db_path"]."/".$this->dbName;
+        $this->db = new \PDO("sqlite:{$dbInfo}");
         $this->checkDBExists();
     }
 
-    public static function getInstance()
+    public static function getInstance($config)
     {
         if(!self::$instance) {
-            self::$instance = new DBHelper();
+            self::$instance = new DBHelper($config);
         }
         return self::$instance;
     }
+
 
     public function checkDBExists(){
         $createDBString = " CREATE TABLE IF NOT EXISTS ". $this->tableName ."(".

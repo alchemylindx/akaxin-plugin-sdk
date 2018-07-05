@@ -14,7 +14,7 @@ require_once(__DIR__ . "/../../sdk-php/AkaxinPluginApiClient.php");
 
 require_once(__DIR__ . "/config.php");
 require_once(__DIR__ . "/dbHelper.php");
-require_once(__DIR__ . "/zalyHelper.php");
+require_once(__DIR__ . "/../zalyHelper.php");
 
 
 class GuessNum
@@ -44,23 +44,23 @@ class GuessNum
      *
      * @author 尹少爷 2018.6.13
      */
-    public static function getInstance()
+    public static function getInstance($configName)
     {
         if(!self::$instance) {
-            self::$instance = new GuessNum();
+            self::$instance = new GuessNum($configName);
         }
         return self::$instance;
     }
 
-    private function __construct()
+    private function __construct($configName)
     {
-        $this->dbHelper   = DBHelper::getInstance();
-        $this->zalyHelper = ZalyHelper::getInstance();
-        $config = getConf();
+
+        $config = getConf($configName);
         $this->pluginId = $config['plugin_id'];
         $this->siteAddress = $config['site_address'];
         $this->pluginHttpDomain = $config['plugin_http_domain'];
-
+        $this->dbHelper   = DBHelper::getInstance($config);
+        $this->zalyHelper = ZalyHelper::getInstance($config);
         ////
 
         $this->cssForWebmsg = <<<eot
@@ -465,8 +465,11 @@ EOT;
     }
 }
 
-
-$guessNumObj =  GuessNum::getInstance();
+$configName = isset($_GET['config_name']) ? $_GET['config_name'] : "default";
+if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
+    $configName = isset($_POST['config_name']) ? $_POST['config_name'] : "default";
+}
+$guessNumObj =  GuessNum::getInstance($configName);
 $guessNumObj->checkoutDB();
 
 $pageType  = isset($_GET['page_type']) ? $_GET['page_type'] : "first";

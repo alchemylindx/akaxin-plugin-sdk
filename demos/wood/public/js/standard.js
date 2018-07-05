@@ -209,6 +209,7 @@ console.log("ppp");
       var gameResult    = document.getElementById("game_result").getAttribute("data");
       var httpDomain    = document.getElementById("http_domain").getAttribute("data");
       var chatSessionId = document.getElementById("chat_session_id").getAttribute('data');
+      var configName = document.getElementById("config_name").getAttribute('data');
 
       if (window.XMLHttpRequest) {////iE7+ fairefox, opera, chrome, safari
           console.log("XMLHttpRequest");
@@ -218,7 +219,8 @@ console.log("ppp");
               page_type: pageType,
               chat_session_id: chatSessionId,
               href_type: hrefType,
-              game_result: gameResult
+              game_result: gameResult,
+              config_name:configName
           };
 
           var xmlHttp = new XMLHttpRequest();

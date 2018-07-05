@@ -15,10 +15,10 @@ class ZalyHelper
     public $innerApiHost;
     public $innerApiPort;
 
-    public static function getInstance()
+    public static function getInstance($config)
     {
         if(!self::$instance) {
-            self::$instance = new ZalyHelper();
+            self::$instance = new ZalyHelper($config);
         }
         return self::$instance;
     }
@@ -28,9 +28,8 @@ class ZalyHelper
      *
      * @author 尹少爷 2018.6.13
      */
-    protected function __construct()
+    protected function __construct($config)
     {
-        $config = getConf();
         $this->pluginId      = $config['plugin_id'];
         $this->pluginAuthKey = $config['plugin_auth_key'];
         $this->innerApiHost = $config['plugin_api_host'];
@@ -49,7 +48,7 @@ class ZalyHelper
         $this->akaxinApiClient->setSessionSiteUserId($siteSessionId);
     }
 
-    
+
     /**
      * @param $siteSessionId
      * @return bool|string

@@ -9,7 +9,7 @@ require_once(__DIR__ . "/../../sdk-php/AkaxinPluginApiClient.php");
 
 require_once(__DIR__ . "/config.php");
 require_once(__DIR__ . "/dbHelper.php");
-require_once(__DIR__ . "/zalyHelper.php");
+require_once(__DIR__ . "/../zalyHelper.php");
 
 class Poke
 {
@@ -29,14 +29,14 @@ class Poke
     public $dbHelper;
     public $zalyHelper;
     public $pluginId;
-    public function __construct()
+    public function __construct($configName)
     {
-        $this->dbHelper   = DBHelper::getInstance();
-        $this->zalyHelper = ZalyHelper::getInstance();
-        $config = getConf();
+        $config = getConf($configName);
         $this->pluginId = $config['plugin_id'];
         $this->siteAddress = $config['site_address'];
         $this->pluginHttpDomain = $config['plugin_http_domain'];
+        $this->dbHelper   = DBHelper::getInstance($config);
+        $this->zalyHelper = ZalyHelper::getInstance($config);
     }
 
     /**
@@ -44,10 +44,10 @@ class Poke
      *
      * @author 尹少爷 2018.6.13
      */
-    public static function getInstance()
+    public static function getInstance($configName)
     {
         if(!self::$instance) {
-            self::$instance = new Poke();
+            self::$instance = new Poke($configName);
         }
         return self::$instance;
     }
@@ -156,8 +156,12 @@ class Poke
         $this->zalyHelper->sendGroupTextMsgByApiClient($chatSessionId, $siteSessionId, $siteUserId, $text);
     }
 }
+$configName = isset($_GET['config_name']) ? $_GET['config_name'] : "default";
+if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
+    $configName = isset($_POST['config_name']) ? $_POST['config_name'] : "default";
+}
 
-$poke = Poke::getInstance();
+$poke = Poke::getInstance($configName);
 $pageType    = isset($_GET['page_type']) ? $_GET['page_type'] : "first";
 $httpReferer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 $urlParams = $poke->parseUrl($httpReferer);
@@ -174,7 +178,8 @@ switch ($pageType) {
     case "first":
         $urlParams['http_domain'] = $poke->pluginHttpDomain;
         $urlParams['suffix'] = "?".time();
-        $urlParams['href_url'] = $poke->pluginHttpDomain."/index.php?chat_session_id=".$urlParams['chat_session_id']."&href_type=".$urlParams['href_type'];
+        $urlParams['config_name'] = $configName;
+        $urlParams['href_url'] = $poke->pluginHttpDomain."/index.php?config_name=".$configName."&chat_session_id=".$urlParams['chat_session_id']."&href_type=".$urlParams['href_type'];
         echo $poke->render("index", $urlParams);
         break;
 
