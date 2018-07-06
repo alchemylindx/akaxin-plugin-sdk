@@ -6,8 +6,9 @@
  * Time: 10:31 AM
  */
 require_once(__DIR__ . "/../../sdk-php/AkaxinPluginApiClient.php");
-
 require_once(__DIR__ . "/config.php");
+//////require_once("/akaxin/poke/config.php");
+
 require_once(__DIR__ . "/dbHelper.php");
 require_once(__DIR__ . "/../helper/zalyHelper.php");
 
