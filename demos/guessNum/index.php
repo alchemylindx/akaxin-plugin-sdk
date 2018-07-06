@@ -78,7 +78,7 @@ eot;
     public function render($fileName, $params = [])
     {
         ob_start();
-        $path = dirname(__DIR__)."/".basename(__DIR__).'/views/'.$fileName.'.html';
+        $path = dirname(__DIR__)."/".basename(__DIR__).'/Views/'.$fileName.'.html';
 
         if ($params) {
             extract($params, EXTR_SKIP);
