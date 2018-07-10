@@ -257,12 +257,13 @@ function ialert(iquestion,idoit) {
     var httpDomain = document.getElementById("http_domain").getAttribute("data");
     var imgUrl = httpDomain+"/public/img/";
     var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    var ih = (iOS) ? screen.height:  window.innerHeight;
-    document.getElementById('alert_content').innerHTML=iquestion+'<br style="clear:both" /><br /><a href="#" onclick="idismiss();eval(\''+idoit+'\'); return false;" ontouchstart="idismiss();eval(\''+idoit+'\'); return false;"><img src='+imgUrl+'/b_okay.png alt="确定" /></a>';
+    // var ih = (iOS) ? screen.height:  window.innerHeight;
+    // var ih = document.body.clientHeight;
 
-    if(ih>400) {
-        document.getElementById('alert_content').style.marginTop=ih*0.2+"px";
-    }
+    // alert(" device is ios ==" + (iOS ? 1 : 0));
+    document.getElementById('alert_content').innerHTML=iquestion+'<br style="clear:both" /><br /><a href="#" onclick="idismiss();eval(\''+idoit+'\'); return false;" ontouchstart="idismiss();eval(\''+idoit+'\'); return false;"><img src='+imgUrl+'/b_okay.png alt="确定" /></a>';
+    // alert("ih web height " + ih);
+
     document.getElementById('alertbox').style.display='block';
 }
 
@@ -286,11 +287,13 @@ function iShareGame(iquestion,idoit) {
     }
 
     var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    var ih = (iOS) ? screen.height:  window.innerHeight;
+    // var ih = (iOS) ? screen.height:  window.innerHeight;
 
-
+    var ih = document.documentElement.clientHeight;
     document.getElementById('alert_content').innerHTML= html;
-    if(ih>400) {
+    // ///alert(window.innerHeight);
+
+    if(ih>800) {
         document.getElementById('alert_content').style.marginTop=ih*0.2+"px";
     } else {
         document.getElementById('alert_content').style.marginTop="20px";

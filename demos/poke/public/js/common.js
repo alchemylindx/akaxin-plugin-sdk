@@ -192,14 +192,18 @@ var btGame;~
 function(bt) {
 	function rate(width, height) {
 
-		var wWidth = window.innerWidth,
-		wHeight = window.innerHeight;
+        var wWidth  = document.documentElement.clientWidth,
+			wHeight = document.documentElement.clientHeight;
 
-        var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        var iw = screen.width, ih = (iOS) ? screen.height:  window.innerHeight;
+        // var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        // var iw = screen.width, ih = (iOS) ? screen.height:  window.innerHeight;
+
+        // ih = document.body.clientHeight;
+        // ih = document.body.offsetHeight;
+
         return {
-            width: iw,
-            height: ih,
+            width: wWidth,
+            height: wHeight,
             top: 0,
             left: 0
         }

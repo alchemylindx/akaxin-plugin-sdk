@@ -46,23 +46,22 @@ POP.splash = function() {
     } else if (POP.Ua.hasTouch === false) {
         POP.draw.text(20,POP.H - 20, 'This game is much more fun on touch devices', 11, 'rgba(255,255,255,0.5)');
     }*/
+    // alert(document.body.clientHeight);
+    // console.log(document.body.clientHeight);
 
-    POP.draw.text(45,330,'戳泡泡！',64, 'rgba(0,0,0,0.3)');
-    POP.draw.text(40,330,'戳泡泡！',64);
-    POP.draw.text(110,440, POP.Ua.action + '开始游戏', 32, col);
-    POP.draw.text(128, 540, '最高分', 20, 'rgba(255,255,255,0.8)');
-    POP.draw.text("center", 580, POP.hiScore.toString(), 24, 'rgba(255,255,255,0.8)');
+    POP.draw.text(45,130,'戳泡泡！',64, 'rgba(0,0,0,0.3)');
+    POP.draw.text(40,130,'戳泡泡！',64);
+    POP.draw.text(110,240, POP.Ua.action + '开始游戏', 32, col);
+    POP.draw.text(128, 340, '最高分', 20, 'rgba(255,255,255,0.8)');
+    POP.draw.text("center", 380, POP.hiScore.toString(), 24, 'rgba(255,255,255,0.8)');
 
     if (POP.m.click && POP.delay > 20) {
         POP.textLayer.style.display = 'none';
         POP.delay = 0;
         POP.touches = [];
         POP.state = 'play';
-
         POP.gameStart = new Date().getTime();
-
     }
-
 };
 
 POP.gameOver = function() {
@@ -75,18 +74,23 @@ POP.gameOver = function() {
 
     POP.draw.text(40,140,'Game Over',40, col);
 
+    var height = document.body.clientHeight;
+    console.log("clientHeight == " + height)
+    ih = document.body.offsetHeight;
+    console.log("offsetHeight height == " + document.documentElement.clientWidth )
+
     // display scores
-	POP.draw.text(115,360,'泡泡数: '+POP.score.burst, 25, '#fff');
-    POP.draw.text(115,390,'精准度: ' + POP.score.accuracy + '%', 25, '#fff');
-    POP.draw.text(131,420,'时间: ' + POP.score.seconds, 25, '#fff');
-    POP.draw.text("center",470,'' + POP.score.total, 35, '#fff');
+	POP.draw.text(115,200,'泡泡数: '+POP.score.burst, 25, '#fff');
+    POP.draw.text(115,230,'精准度: ' + POP.score.accuracy + '%', 25, '#fff');
+    POP.draw.text(131,260,'时间: ' + POP.score.seconds, 25, '#fff');
+    POP.draw.text("center",310,'' + POP.score.total, 35, '#fff');
 
     document.getElementById("game_use_time").setAttribute("data", POP.score.seconds+"");
     document.getElementById("game_result").setAttribute("data", POP.score.burst+"");
     document.getElementById("game_accuracy").setAttribute("data",  POP.score.accuracy+"");
 
     if (POP.newHiscore) {
-        POP.draw.text('center', 510, '新记录!!!', 35, col2);
+        POP.draw.text('center', 350, '新记录!!!', 35, col2);
     }
 	// 绘画更多游戏
 	//POP.draw.rect(10, 330, 50, 20, "#fff")

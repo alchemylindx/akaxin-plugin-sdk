@@ -7,7 +7,7 @@
 
     <meta name="keywords" content="games, online games, mobile games, html5 games" />
 
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no">
+    <meta name="viewport" content="width = 320,initial-scale=1,user-scalable=no" />
 
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -44,7 +44,7 @@
 
         <?php if($href_type=="u2_msg" || $href_type=="group_msg") { ?>
         <a href="#" id="playAgain">
-            再来一次s
+            再来一次
         </a>
         <a href="#" id="shareGame">
             炫耀一下
@@ -193,12 +193,20 @@
             location.reload();
         }
     });
-    btGame.resizePlayArea($("#SF_Game"), 960, 1280, "center", "center");
+    var height = document.body.clientHeight;
+    var width  = document.body.clientWidth;
+
+    btGame.resizePlayArea($("#SF_Game"), height, width, "center", "center");
     $("#SF_Game").on("resizePlayArea", function(){
         SF_gameStart();
         SF_gameStart = function(){};
     });
-    $("#SF_Game").style.height="960px";
+    // var height = screen.height;
+    console.log("height == " + height)
+    ih = document.body.offsetHeight;
+    console.log("offsetHeight height == " + document.body.scrollTop )
+
+    document.getElementById("SF_Game").style.height = height;
 </script>
 </body>
 </html>

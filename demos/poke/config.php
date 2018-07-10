@@ -3,12 +3,10 @@
 $conf = [
     "default" => [
         // 扩展服务器WEB地址，用以加载静态文件的根目录
-        "plugin_http_domain" => "http://192.168.3./43:5199",
-        "plugin_http_domain" => "http://192.168.1.102:5199",
+        "plugin_http_domain" => "http://192.168.3.43:5199",
 
         // 用户在客户端访问站点的地址
-//        "site_address" => "192.168.3.43:2022",
-        "site_address" => "192.168.1.102:2022",
+        "site_address" => "192.168.3.43:2022",
 
 
         // PluginApiServer
