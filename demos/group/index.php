@@ -53,7 +53,6 @@ class Group
 
     private function __construct($configName)
     {
-
         $config = getConf($configName);
         $this->pluginId = $config['plugin_id'];
         $this->siteAddress = $config['site_address'];
@@ -117,7 +116,27 @@ eot;
     public function getGroupLists($page = 1, $pageSize = 15)
     {
         $result = $this->zalyHelper->getGroupLists($page, $pageSize);
-        $result['loading'] = $result['total_num'] >= $pageSize ? true : false;
+        return $result;
+    }
+
+    public function joinGroupByGroupId($siteSessionId, $groupId)
+    {
+        $userProfile = $this->zalyHelper->getSiteUserProfile($siteSessionId);
+        if(!$userProfile) {
+            return "ಥ_ಥ 正在抓捕中";
+        }
+        $siteUserId = $userProfile->getSiteUserId();
+        $result = $this->zalyHelper->addGroupMemberByGroupId([$siteUserId], $groupId);
+        switch ($result) {
+            case $this->zalyHelper->inGroup:
+                $result = "(｡･ω･｡)ﾉ♡ 已是群成员";
+                break;
+            case true:
+                $result = "success";
+                break;
+            default :
+                $result = "ಥ_ಥ 正在抓捕中";
+        }
         return $result;
     }
 
@@ -133,8 +152,9 @@ $pageType  = isset($_GET['page_type']) ? $_GET['page_type'] : "first";
 $page = isset($_GET['page_num']) ? $_GET['page_num'] : 1;
 
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
-    $pageType  = isset($_POST['page_type']) ? $_POST['page_type'] : "next_list";
-    $page = isset($_POST['page_num']) ? $_POST['page_num'] : 1;
+    $pageType = isset($_POST['page_type']) ? $_POST['page_type'] : "next_list";
+    $page     = isset($_POST['page_num']) ? $_POST['page_num'] : 1;
+    $groupId  = isset($_POST['group_id']) ? $_POST['group_id'] : "";
 }
 
 $httpCookie = isset($_COOKIE) ?  $_COOKIE : "";
@@ -149,7 +169,6 @@ switch ($pageType) {
     case "first":
         $urlParams['http_domain'] = $group->pluginHttpDomain;
         $urlParams['config_name'] = $configName;
-        $urlParams['href_url'] = $group->pluginHttpDomain."/index.php?config_name=".$configName."&chat_session_id=".$urlParams['chat_session_id'];
         $groupLists = $group->getGroupLists($page, $pageSize);
         $urlParams = array_merge($urlParams, $groupLists);
         echo $group->render("index", $urlParams);
@@ -159,5 +178,6 @@ switch ($pageType) {
         echo json_encode($groupLists['group_list']);
         break;
     case "join_group":
+        echo $group->joinGroupByGroupId($siteSessionId, $groupId);
         break;
 }

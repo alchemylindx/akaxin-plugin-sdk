@@ -48,7 +48,7 @@
                         暂无数据
                     <?php } ?>
                 </div>
-            <input type="hidden" class="group_list_info" group-list='<?php echo json_encode($group_list, true);?>'>
+                <input type="hidden" class="group_list_info" group-list='<?php echo json_encode($group_list, true);?>'>
                 <input type="hidden" class="config_name" data="<?php echo $config_name;?>">
 
             </div>
@@ -78,29 +78,36 @@
     page = 1;
     groupIndex = 1;
     $(document).on("click", ".join_group", function() {
-        setTimeout(function(){
-            // $('.is_friend_bg').addClass('hidden');
-            // $('.is_friend_bg').removeClass('zoomIn');
-            // $('.is_friend_bg').addClass('zoomOut');
-            // $('.friend_match_div').removeClass('mark');
-            // RENDERER.stop();
+        var groupId = $('.join_group').attr("site-group-id");
+        var configName = $(".config_name").attr('data');
+        $.ajax({
+            method: "POST",
+            url:"<?php echo $http_domain;?>/index.php",
+            data: {
+                page_type: "join_group",
+                config_name:configName,
+                group_id:groupId
+            },
+            success:function (data) {
+                console.log(data);
+                if(data == "success") {
+                    nextGroupInfo();
+                } else {
+                    Zaly.tip(data)
+                }
 
-        }, 4000);
-
+            }
+        });
     });
-
-
-    function reqNextUserInfo() {
-        var url = $('.no_like_you').attr('url-data');
-
-
-    }
 
     var groupListJsonStr = $(".group_list_info").attr("group-list");
     var groupListArr = JSON.parse(groupListJsonStr);
 
-
     $(document).on("click", ".next_group ", function () {
+        nextGroupInfo();
+    });
+
+    function nextGroupInfo() {
         var groupInfo  = groupListArr.shift();
         var configName = $(".config_name").attr('data');
         if(groupInfo) {
@@ -118,19 +125,23 @@
                 },
                 success:function (data) {
                     groupListJsonStr = data;
-                    console.log(data);
                     groupListArr = JSON.parse(groupListJsonStr);
                     groupInfo = groupListArr.shift();
+                    if(!groupInfo) {
+                        Zaly.tip("ｸﾞｯ!(๑•̀ㅂ•́)و✧ｸﾞｯ!(๑•̀ㅂ•́)و✧ 休息一下吧")
+                    }
                     addGroupInfo(groupInfo);
+
                 }
             });
         }
-    });
-
+    }
     function addGroupInfo(group) {
         if(group) {
+            group.group_notice = "暂无详细介绍";
             $('.user_info').addClass('fadeOutLeft');
-            html = '<div class="like_height group_info animated  fadeInRight" site-group-id="'+group.group_id+'" > <div class=" center-block position_absolute" > <div class=" position_absolute  "> <img class="group_icon img-thumbnail '+ group.group_icon+' " site-group-logo="'+ group.group_icon+'" style=" margin-top:20%; height: 50%;width: 40%; overflow: hidden;"> </div> </div> <div  class=" position_absolute like_group_name"  style="top: 70%;"> '+ group.group_name +'</div> <div  class=" position_absolute like_group_desc"  style="top: 80%;"> 测试 测试 </div> <div class="position_absolute like_user_info_div " > <div class="col-xs-5 col-sm-* "> <div class=" center-block position_absolute like_user_hometown "> <label style="margin-top:10px"><br/></label> <br/> </div> </div> </div> </div>'
+            $('.join_group').attr("site-group-id", group.group_id);
+            html = '<div class="like_height group_info animated  fadeInRight" site-group-id="'+group.group_id+'" > <div class=" center-block position_absolute" > <div class=" position_absolute  "> <img class="group_icon img-thumbnail '+ group.group_icon+' " site-group-logo="'+ group.group_icon+'" style=" margin-top:20%; height: 50%;width: 40%; overflow: hidden;"> </div> </div> <div  class=" position_absolute like_group_name"  style="top: 70%;"> '+ group.group_name +'</div> <div  class=" position_absolute like_group_desc"  style="top: 80%;"> '+group.group_notice+' </div> <div class="position_absolute like_user_info_div " > <div class="col-xs-5 col-sm-* "> <div class=" center-block position_absolute like_user_hometown "> <label style="margin-top:10px"><br/></label> <br/> </div> </div> </div> </div>'
             $('.content_div').html(html);
             Zaly.reqImageDownload(group.group_icon, "jsimageDownload");
             $('.group_info').addClass('fadeInRight');
