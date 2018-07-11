@@ -1,11 +1,12 @@
 body, html {
     height: 100%;
+    background-color: #cccccc;
     -webkit-tap-highlight-color: transparent;
 }
 .container {
     height:100%;
     width:100%;
-    background-color: #f4f4f4;
+    background-color: #cccccc;
 }
 .basic-title {
     text-align: center;
@@ -292,11 +293,11 @@ a, a:hover{
     left: 0;
     right: 0;
     width: 80%;
-    height: 70%;
-    margin: 10% auto;
+    height: 60%;
+    margin: 15% auto;
     border-radius: 2%;
     background-color: #FFFFFF;
-    box-shadow: 1px 1px 1px #cccccc;
+    box-shadow: 1px 1px 1px 1px #cccccc;
 
 }
 
@@ -306,12 +307,12 @@ a, a:hover{
     bottom:0;
     left: 0;
     right: 0;
-    width:85%;
-    margin: 9% auto;
-    height: 70%;
+    width:75%;
+    margin: 13% auto;
+    height: 65%;
     border-radius: 2%;
     background-color: #FFFFFF;
-    box-shadow: 1px 1px 1px #cccccc;
+    box-shadow: 1px 1px 1px 1px #cccccc;
 }
 
 .like_height{
@@ -320,12 +321,12 @@ a, a:hover{
     bottom:0;
     left: 0;
     right: 0;
-    width:90%;
-    margin: 8% auto;
+    width:70%;
+    margin: 9% auto;
     height: 70%;
     border-radius: 2%;
     background-color: #FFFFFF;
-    box-shadow: 1px 1px 1px #cccccc;
+    box-shadow: 1px 1px 1px 1px #cccccc;
 }
 
 .width_35{
@@ -357,6 +358,15 @@ a, a:hover{
     opacity: 0.8;
     text-align: center;
 }
+
+.like_group_desc {
+    font-size: 18px;
+    height: 18px;
+    color: #373737;
+    opacity: 0.8;
+    text-align: center;
+}
+
 
 .like_user_info_div {
     margin-top: 90%;
@@ -666,9 +676,8 @@ body {
     cursor: pointer;
     position: relative;
     transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
-    box-shadow: 0 2px 25px rgba(255, 0, 130, 0.5);
+    box-shadow: 0 2px 25px rgba(0, 0, 55, 0.5);
 }
-
 
 .bubbly-button {
     font-family: 'Helvetica', 'Arial', sans-serif;
@@ -687,10 +696,11 @@ body {
     transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
     box-shadow: 0 2px 25px rgba(255, 0, 130, 0.5);
 }
-.bubbly-button:focus {
+
+.bubbly-button:focus, .bubbly-next-button:focus{
     outline: 0;
 }
-.bubbly-button:before, .bubbly-button:after {
+.bubbly-button:before, .bubbly-button:after,.bubbly-next-button:before,.bubbly-next-button:after {
     position: absolute;
     content: '';
     display: block;

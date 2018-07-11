@@ -130,46 +130,34 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
 $group =  Group::getInstance($configName);
 
 $pageType  = isset($_GET['page_type']) ? $_GET['page_type'] : "first";
-$hrefType  = isset($_GET['href_type']) ? $_GET['href_type'] : "";
-$chatSessionId = isset($_GET['chat_session_id']) ? $_GET['chat_session_id'] :"";
-////如果是下载图片，则直接返回数据
-if($pageType == 'imageDownload') {
-    $gameSiteUserId = isset($_GET['game_site_user_id']) ? $_GET['game_site_user_id'] : "";
-    $userAvatar     = $group->zalyHelper->getUserAvatar($gameSiteUserId);
-    header('Content-Type: image/png');
-    echo $userAvatar;
-    return false;
-}
+$page = isset($_GET['page_num']) ? $_GET['page_num'] : 1;
 
-/////默认第四步骤是post请求
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
-    $pageType  = isset($_POST['page_type']) ? $_POST['page_type'] : "four";
-    $hrefType  = isset($_POST['href_type']) ? $_POST['href_type'] : "";
-    $chatSessionId = isset($_POST['chat_session_id']) ? $_POST['chat_session_id'] :"";
+    $pageType  = isset($_POST['page_type']) ? $_POST['page_type'] : "next_list";
+    $page = isset($_POST['page_num']) ? $_POST['page_num'] : 1;
 }
 
 $httpCookie = isset($_COOKIE) ?  $_COOKIE : "";
 $siteSessionId = $httpCookie;
 $siteSessionId = isset($siteSessionId['akaxin_site_session_id']) ? $siteSessionId['akaxin_site_session_id'] : '';
-
 $httpReferer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 ////第一次进来需要处理chatSession, 以及hrefType, akaxin_param其他的时候
 $urlParams   = $group->parseUrl($httpReferer);
-
-if(isset($urlParams['akaxin_param']) && $urlParams['akaxin_param']) {
-    $params = json_decode($urlParams['akaxin_param'], true);
-    $pageType  = isset($params['page_type']) ? $params['page_type'] : "third" ;
-    $hrefType  = $urlParams['href_type'];
-    $chatSessionId = $urlParams['chat_session_id'];
-}
+$pageSize = 3;
 
 switch ($pageType) {
     case "first":
         $urlParams['http_domain'] = $group->pluginHttpDomain;
-        $urlParams['href_url'] = $group->pluginHttpDomain."/index.php?config_name=".$configName."&is_sponsor=1&page_type=second&chat_session_id=".$urlParams['chat_session_id']."&href_type=".$urlParams['href_type'];
-        $groupLists = $group->getGroupLists();
+        $urlParams['config_name'] = $configName;
+        $urlParams['href_url'] = $group->pluginHttpDomain."/index.php?config_name=".$configName."&chat_session_id=".$urlParams['chat_session_id'];
+        $groupLists = $group->getGroupLists($page, $pageSize);
         $urlParams = array_merge($urlParams, $groupLists);
         echo $group->render("index", $urlParams);
         break;
-
+    case "next_list":
+        $groupLists = $group->getGroupLists($page, $pageSize);
+        echo json_encode($groupLists['group_list']);
+        break;
+    case "join_group":
+        break;
 }

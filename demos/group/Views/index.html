@@ -23,14 +23,17 @@
                 </div>
                 <div class="content_div">
                     <?php if (isset($group_list[0])) { ?>
-                    <div class="like_height user_info animated  fadeInRight" site-group-id="<?php echo $group_list[0]['group_id'];?>" >
+                    <div class="like_height group_info animated  fadeInRight" site-group-id="<?php echo $group_list[0]['group_id'];?>" >
                         <div class=" center-block position_absolute" >
                             <div class=" position_absolute  ">
-                                <img class="group_icon img-thumbnail <?php echo $group_list[0]['group_icon']?> " site-group-logo="<?php echo $group_list[0]['group_icon'];?>" style="margin-top: 10px; height: 80%;width: 60%; overflow: hidden;">
+                                <img class="group_icon img-thumbnail <?php echo $group_list[0]['group_icon']?> " site-group-logo="<?php echo $group_list[0]['group_icon'];?>" style="top:20%; height: 75%;width: 60%; overflow: hidden;">
                             </div>
                         </div>
-                        <div  class=" position_absolute like_group_name"  style="top: 90%;">
+                        <div  class=" position_absolute like_group_name"  style="top: 80%;">
                             <?php echo $group_list[0]['group_name'];?>
+                        </div>
+                        <div  class=" position_absolute like_group_desc"  style="top: 90%;">
+                            测试 测试
                         </div>
                         <div class="position_absolute like_user_info_div " >
                             <div class="col-xs-5 col-sm-* ">
@@ -45,13 +48,15 @@
                         暂无数据
                     <?php } ?>
                 </div>
+            <input type="hidden" class="group_list_info" group-list='<?php echo json_encode($group_list, true);?>'>
+                <input type="hidden" class="config_name" data="<?php echo $config_name;?>">
 
             </div>
             <div class="like_or_no_like" style="width:100%; margin:0px auto;position:relative; margin-top: 0; "  >
-                <div class="col-xs-6 col-sm-* no_like_you "  url-data="/SchoolActivity/FriendsMatch/pull">
+                <div class="col-xs-6 col-sm-* next_group "  url-data="/index.php">
                     <button class="bubbly-next-button">给朕换下一个</button>
                 </div>
-                <div class="col-xs-6 col-sm-* like_you  "   url-data="/SchoolActivity/FriendsMatch/likeFriend">
+                <div class="col-xs-6 col-sm-* join_group "   url-data="/index.php?page_type=join_group">
                     <button class="bubbly-button">加入群聊!</button>
                 </div>
             </div>
@@ -71,7 +76,8 @@
 
 <script type="text/javascript">
     page = 1;
-    $(document).on("click", ".like_you", function() {
+    groupIndex = 1;
+    $(document).on("click", ".join_group", function() {
         setTimeout(function(){
             // $('.is_friend_bg').addClass('hidden');
             // $('.is_friend_bg').removeClass('zoomIn');
@@ -90,54 +96,61 @@
 
     }
 
-    $(document).on("click", ".no_like_you ", function () {
-        page = page+1;
-        reqNextUserInfo();
+    var groupListJsonStr = $(".group_list_info").attr("group-list");
+    var groupListArr = JSON.parse(groupListJsonStr);
+
+
+    $(document).on("click", ".next_group ", function () {
+        var groupInfo  = groupListArr.shift();
+        var configName = $(".config_name").attr('data');
+        if(groupInfo) {
+            addGroupInfo(groupInfo);
+        } else {
+            console.log("console log ");
+            page = page+1;
+            $.ajax({
+                method: "POST",
+                url:"<?php echo $http_domain;?>/index.php",
+                data: {
+                    page_type: "next_list",
+                    config_name:configName,
+                    page_num : page,
+                },
+                success:function (data) {
+                    groupListJsonStr = data;
+                    console.log(data);
+                    groupListArr = JSON.parse(groupListJsonStr);
+                    groupInfo = groupListArr.shift();
+                    addGroupInfo(groupInfo);
+                }
+            });
+        }
     });
 
-    function addUserInfo(result) {
-        if(result != 'fail') {
-            user = JSON.parse(result);
-            if(user.type == 'like_each_other') {
-                $('.self_user_logo').addClass(user.site_user_logo);
-                $('.self_user_logo').attr('site-user-logo', user.site_user_logo);
-                $('.friend_user_logo').addClass(user.friend_user_logo);
-                $('.friend_user_logo').attr('site-user-logo', user.friend_user_logo);
-                var html = "你和"+user.friend_user_name+"互相成为了好友";
-                $('.is_friend_button').attr('zaly-url', user.zaly_url);
-                $('.friend_text').html(html);
-                reqImageDownload(user.site_user_logo, "jsimageDownloadByLike");
-                reqImageDownload(user.friend_user_logo, "jsimageDownloadByLike");
-                $('.is_friend_bg').removeClass('hidden');
-                $('.is_friend_bg').addClass('zoomIn');
-                $('.friend_match_div').addClass('mark');
-            } else {
-                $('.user_info').addClass('fadeOutLeft');
-                // html = '<div class="like_height user_info animated  fadeInRight" site-user-id="'+user.site_user_id+'" > <div class=" center-block position_absolute" > <div class=" position_absolute "> <img class=" user_photo img-circle '+user.logo_id+' " site-user-logo="'+user.logo_id+'" style="margin-top: 10px;"> </div> </div> <div  class=" position_absolute like_user_name" site-user-name="'+user.site_user_name+'"> '+user.site_user_name+' </div> <div class="position_absolute like_user_info_div "> <div class="col-xs-5 col-sm-* "> <div class=" center-block position_absolute like_user_hometown "> 信息:'+user.profession+'\/'+user.grade+' <label style="margin-top:10px"><br/></label>  <br/> 家乡:'+user.hometown+' </div> </div> <div class="col-xs-1 " > <p class="position_absolute like_sidebar_right "></p> </div> <div class="col-xs-5 col-sm-* "> <div class="center-block  position_absolute like_user_motto "> '+user.motto+' </div> </div> </div> </div> </div>'
-                $('.content_div').html(html);
-                reqImageDownload(user.logo_id, "jsimageDownload");
-                $('.user_info').addClass('fadeInRight');
-            }
-        }
-        if(result =='fail'){
-            toast('数据已经到底啦，休息一下吧');
-            page = 1;
+    function addGroupInfo(group) {
+        if(group) {
+            $('.user_info').addClass('fadeOutLeft');
+            html = '<div class="like_height group_info animated  fadeInRight" site-group-id="'+group.group_id+'" > <div class=" center-block position_absolute" > <div class=" position_absolute  "> <img class="group_icon img-thumbnail '+ group.group_icon+' " site-group-logo="'+ group.group_icon+'" style=" margin-top:20%; height: 50%;width: 40%; overflow: hidden;"> </div> </div> <div  class=" position_absolute like_group_name"  style="top: 70%;"> '+ group.group_name +'</div> <div  class=" position_absolute like_group_desc"  style="top: 80%;"> 测试 测试 </div> <div class="position_absolute like_user_info_div " > <div class="col-xs-5 col-sm-* "> <div class=" center-block position_absolute like_user_hometown "> <label style="margin-top:10px"><br/></label> <br/> </div> </div> </div> </div>'
+            $('.content_div').html(html);
+            Zaly.reqImageDownload(group.group_icon, "jsimageDownload");
+            $('.group_info').addClass('fadeInRight');
         }
     }
 
     $(document).ready(function(){
-        var logoId = $('.group_icon').attr('site-group-logo');
-        console.log("image id "+ logoId);
-        Zaly.reqImageDownload(logoId, "jsimageDownload");
+        var groupInfo  = groupListArr.shift();
+        if(groupInfo) {
+            addGroupInfo(groupInfo);
+        }
     });
 
     function jsimageDownload(result, imageid, imageLocalPath) {
         var type = Zaly.getOsType();
+        console.log(imageLocalPath);
         if (type == 'Android') {
             imageLocalPath = 'http://akaxin/img' + imageLocalPath;
         }
         $('.'+imageid).attr("src", imageLocalPath);
-        // $('#user_photo').html(html);
     }
 
 
