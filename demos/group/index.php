@@ -162,8 +162,8 @@ $siteSessionId = $httpCookie;
 $siteSessionId = isset($siteSessionId['akaxin_site_session_id']) ? $siteSessionId['akaxin_site_session_id'] : '';
 $httpReferer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 ////第一次进来需要处理chatSession, 以及hrefType, akaxin_param其他的时候
-$urlParams   = $group->parseUrl($httpReferer);
-$pageSize = 3;
+$urlParams = $group->parseUrl($httpReferer);
+$pageSize  = 20;
 
 switch ($pageType) {
     case "first":

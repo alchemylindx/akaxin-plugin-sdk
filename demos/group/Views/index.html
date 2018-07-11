@@ -78,6 +78,9 @@
     page = 1;
     groupIndex = 1;
     $(document).on("click", ".join_group", function() {
+        joinGroup();
+    });
+    function joinGroup() {
         var groupId = $('.join_group').attr("site-group-id");
         var configName = $(".config_name").attr('data');
         $.ajax({
@@ -94,11 +97,12 @@
                     nextGroupInfo();
                 } else {
                     Zaly.tip(data)
+                    nextGroupInfo();
                 }
 
             }
         });
-    });
+    }
 
     var groupListJsonStr = $(".group_list_info").attr("group-list");
     var groupListArr = JSON.parse(groupListJsonStr);
@@ -131,7 +135,6 @@
                         Zaly.tip("ｸﾞｯ!(๑•̀ㅂ•́)و✧ｸﾞｯ!(๑•̀ㅂ•́)و✧ 休息一下吧")
                     }
                     addGroupInfo(groupInfo);
-
                 }
             });
         }
@@ -191,6 +194,31 @@
     for (var i = 0; i < bubblyButtons.length; i++) {
         bubblyButtons[i].addEventListener('click', animateButton, false);
     }
+
+    $(".content_div").on("touchstart", function(e) {
+        e.preventDefault();
+        startX = e.originalEvent.changedTouches[0].pageX,
+            startY = e.originalEvent.changedTouches[0].pageY;
+    });
+    $(".content_div").on("touchmove", function(e) {
+        e.preventDefault();
+        moveEndX = e.originalEvent.changedTouches[0].pageX,
+            moveEndY = e.originalEvent.changedTouches[0].pageY,
+            X = moveEndX - startX,
+            Y = moveEndY - startY;
+
+        if ( Math.abs(X) > Math.abs(Y) && X > 0 ) {
+            console.log("to right");
+            ////右滑喜欢
+            joinGroup();
+        }
+        else if ( Math.abs(X) > Math.abs(Y) && X < 0 ) {
+            // console.log("to left");
+            ////左滑不喜欢
+            nextGroupInfo();
+        }
+    });
+
 
 </script>
 </body>
