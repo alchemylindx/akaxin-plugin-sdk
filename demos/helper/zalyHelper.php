@@ -72,6 +72,47 @@ class ZalyHelper
     }
 
     /**
+     * 获取群列表
+     *
+     * @param $page
+     * @param $pageSize
+     * @return array
+     * @throws \Google\Protobuf\Internal\Exception
+     *
+     * @author 尹少爷 2018.6.11
+     */
+    public function getGroupLists($page, $pageSize)
+    {
+        $groupListRequest = new Akaxin\Proto\Plugin\HaiGroupListRequest();
+        $groupListRequest->setPageNumber($page);
+        $groupListRequest->setPageSize($pageSize);
+
+        $responseData = $this->akaxinApiClient->request("/hai/group/list", $groupListRequest);
+        $groupListResponse = new Akaxin\Proto\Plugin\HaiGroupListResponse();
+        $groupListResponse->mergeFromString($responseData);
+        try{
+            $groupListProfile = $groupListResponse->getGroupProfile();
+            $groupLists = [];
+            foreach ($groupListProfile as $key => $groupProfile) {
+                $groupLists[$key]['group_id']   = $groupProfile->getGroupId();
+                $groupLists[$key]['group_name'] = $groupProfile->getGroupName();
+                $groupLists[$key]['group_icon'] = $groupProfile->getGroupIcon();
+            }
+            $pageTotalNum = $groupListResponse->getPageTotalNum();
+            return [
+                'group_list' => $groupLists,
+                'total_num'  => $pageTotalNum
+            ];
+        }catch (Exception $e) {
+            error_log("request fail error_msg ==".$e->getMessage());
+            return [
+                'group_list' => [],
+                'total_num'  => 0
+            ];
+        }
+    }
+
+    /**
      * 站点代发消息
      * @param $chatSessionId
      * @param $siteSessionId

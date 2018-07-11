@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>好友匹配</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css" />
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css">
+    <link rel="stylesheet" href="<?php echo $http_domain;?>/Public/css/zaly.css" />
+</head>
+
+<body ontouchstart="">
+
+<div id="container" class="row friend_match_div" style="width:100%; height:100%;margin:0px auto;position:relative; ">
+    <div class="position_absolute">
+        <div style="width:100%; height:100%; margin:0px auto;position:relative; margin-top: 0; ">
+            <div style="width:100%; height:80%; margin:15px auto; margin-top: 0; " >
+                <div class="like_first" >
+                </div>
+                <div class="like_second" >
+                </div>
+                <div class="content_div">
+                    <?php if (isset($group_list[0])) { ?>
+                    <div class="like_height user_info animated  fadeInRight" site-group-id="<?php echo $group_list[0]['group_id'];?>" >
+                        <div class=" center-block position_absolute" >
+                            <div class=" position_absolute  ">
+                                <img class="group_icon img-thumbnail <?php echo $group_list[0]['group_icon']?> " site-group-logo="<?php echo $group_list[0]['group_icon'];?>" style="margin-top: 10px; height: 80%;width: 60%; overflow: hidden;">
+                            </div>
+                        </div>
+                        <div  class=" position_absolute like_group_name"  style="top: 90%;">
+                            <?php echo $group_list[0]['group_name'];?>
+                        </div>
+                        <div class="position_absolute like_user_info_div " >
+                            <div class="col-xs-5 col-sm-* ">
+                                <div class=" center-block position_absolute like_user_hometown ">
+                                    <label style="margin-top:10px"><br/></label>
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php } else { ?>
+                        暂无数据
+                    <?php } ?>
+                </div>
+
+            </div>
+            <div class="like_or_no_like" style="width:100%; margin:0px auto;position:relative; margin-top: 0; "  >
+                <div class="col-xs-6 col-sm-* no_like_you "  url-data="/SchoolActivity/FriendsMatch/pull">
+                    <button class="bubbly-next-button">给朕换下一个</button>
+                </div>
+                <div class="col-xs-6 col-sm-* like_you  "   url-data="/SchoolActivity/FriendsMatch/likeFriend">
+                    <button class="bubbly-button">加入群聊!</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.3/weui.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.js"></script>
+<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="<?php echo $http_domain;?>/Public/js/zaly.js" ></script>
+<script type="text/javascript" src="<?php echo $http_domain;?>/Public/js/fountain.js" ></script>
+
+<script type="text/javascript">
+    page = 1;
+    $(document).on("click", ".like_you", function() {
+        setTimeout(function(){
+            // $('.is_friend_bg').addClass('hidden');
+            // $('.is_friend_bg').removeClass('zoomIn');
+            // $('.is_friend_bg').addClass('zoomOut');
+            // $('.friend_match_div').removeClass('mark');
+            // RENDERER.stop();
+
+        }, 4000);
+
+    });
+
+
+    function reqNextUserInfo() {
+        var url = $('.no_like_you').attr('url-data');
+
+
+    }
+
+    $(document).on("click", ".no_like_you ", function () {
+        page = page+1;
+        reqNextUserInfo();
+    });
+
+    function addUserInfo(result) {
+        if(result != 'fail') {
+            user = JSON.parse(result);
+            if(user.type == 'like_each_other') {
+                $('.self_user_logo').addClass(user.site_user_logo);
+                $('.self_user_logo').attr('site-user-logo', user.site_user_logo);
+                $('.friend_user_logo').addClass(user.friend_user_logo);
+                $('.friend_user_logo').attr('site-user-logo', user.friend_user_logo);
+                var html = "你和"+user.friend_user_name+"互相成为了好友";
+                $('.is_friend_button').attr('zaly-url', user.zaly_url);
+                $('.friend_text').html(html);
+                reqImageDownload(user.site_user_logo, "jsimageDownloadByLike");
+                reqImageDownload(user.friend_user_logo, "jsimageDownloadByLike");
+                $('.is_friend_bg').removeClass('hidden');
+                $('.is_friend_bg').addClass('zoomIn');
+                $('.friend_match_div').addClass('mark');
+            } else {
+                $('.user_info').addClass('fadeOutLeft');
+                // html = '<div class="like_height user_info animated  fadeInRight" site-user-id="'+user.site_user_id+'" > <div class=" center-block position_absolute" > <div class=" position_absolute "> <img class=" user_photo img-circle '+user.logo_id+' " site-user-logo="'+user.logo_id+'" style="margin-top: 10px;"> </div> </div> <div  class=" position_absolute like_user_name" site-user-name="'+user.site_user_name+'"> '+user.site_user_name+' </div> <div class="position_absolute like_user_info_div "> <div class="col-xs-5 col-sm-* "> <div class=" center-block position_absolute like_user_hometown "> 信息:'+user.profession+'\/'+user.grade+' <label style="margin-top:10px"><br/></label>  <br/> 家乡:'+user.hometown+' </div> </div> <div class="col-xs-1 " > <p class="position_absolute like_sidebar_right "></p> </div> <div class="col-xs-5 col-sm-* "> <div class="center-block  position_absolute like_user_motto "> '+user.motto+' </div> </div> </div> </div> </div>'
+                $('.content_div').html(html);
+                reqImageDownload(user.logo_id, "jsimageDownload");
+                $('.user_info').addClass('fadeInRight');
+            }
+        }
+        if(result =='fail'){
+            toast('数据已经到底啦，休息一下吧');
+            page = 1;
+        }
+    }
+
+    $(document).ready(function(){
+        var logoId = $('.group_icon').attr('site-group-logo');
+        console.log("image id "+ logoId);
+        Zaly.reqImageDownload(logoId, "jsimageDownload");
+    });
+
+    function jsimageDownload(result, imageid, imageLocalPath) {
+        var type = Zaly.getOsType();
+        if (type == 'Android') {
+            imageLocalPath = 'http://akaxin/img' + imageLocalPath;
+        }
+        $('.'+imageid).attr("src", imageLocalPath);
+        // $('#user_photo').html(html);
+    }
+
+
+
+    function goonNext(){
+        $('.is_friend_bg').addClass('zoomOut');
+        $('.is_friend_bg').addClass('hidden');
+        $('.friend_match_div').removeClass('mark');
+        page = page+1;
+        reqNextUserInfo();
+    }
+
+    var animateButton = function(e) {
+
+        e.preventDefault;
+        //reset animation
+        e.target.classList.remove('animate');
+
+        e.target.classList.add('animate');
+        setTimeout(function(){
+            e.target.classList.remove('animate');
+        },700);
+    };
+
+    var bubblyButtons = document.getElementsByClassName("bubbly-button");
+
+    for (var i = 0; i < bubblyButtons.length; i++) {
+        bubblyButtons[i].addEventListener('click', animateButton, false);
+    }
+
+</script>
+</body>
+
+</html>
