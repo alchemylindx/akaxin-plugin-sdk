@@ -15,6 +15,8 @@ class ZalyHelper
     public $innerApiHost;
     public $innerApiPort;
 
+    public $inGroup = "group_member";
+
     public static function getInstance($config)
     {
         if(!self::$instance) {
@@ -56,7 +58,7 @@ class ZalyHelper
      *
      * @author 尹少爷 2018.6.11
      */
-    public  function getSiteUserProfile($siteSessionId)
+    public function getSiteUserProfile($siteSessionId)
     {
         $profileRequest = new Akaxin\Proto\Plugin\HaiSessionProfileRequest();
         $profileRequest->setBase64SafeUrlSessionId($siteSessionId);
@@ -71,6 +73,23 @@ class ZalyHelper
         return $userProfile;
     }
 
+    public function addGroupMemberByGroupId($siteUserIds, $groupId)
+    {
+
+        $request = new Akaxin\Proto\Plugin\HaiGroupAddMemberRequest();
+        $request->setGroupId($groupId);
+        $request->setMemberSiteUserId($siteUserIds);
+        $responseData = $this->akaxinApiClient->request("/hai/group/addMember", $request);
+        if(!$responseData) {
+            ////检查是否在群里
+            $notGroupMembers = $this->checkGroupMember($siteUserIds, $groupId);
+            if(count($notGroupMembers) == 0) {
+                return $this->inGroup;
+            }
+            return $this->akaxinApiClient->errorInfo();
+        }
+        return true;
+    }
     /**
      * 获取群列表
      *
@@ -94,9 +113,14 @@ class ZalyHelper
             $groupListProfile = $groupListResponse->getGroupProfile();
             $groupLists = [];
             foreach ($groupListProfile as $key => $groupProfile) {
-                $groupLists[$key]['group_id']   = $groupProfile->getGroupId();
-                $groupLists[$key]['group_name'] = $groupProfile->getGroupName();
-                $groupLists[$key]['group_icon'] = $groupProfile->getGroupIcon();
+//                $groupProfile = $this->getGroupProfile($groupProfile->getGroupId());
+//                $groupLists[$key]['group_id']     = $groupProfile->getId();
+//                $groupLists[$key]['group_name']   = $groupProfile->getName();
+//                $groupLists[$key]['group_icon']   = $groupProfile->getIcon();
+//                $groupLists[$key]['group_notice'] = $groupProfile->getGroupNotice();
+                $groupLists[$key]['group_id']     = $groupProfile->getGroupId();
+                $groupLists[$key]['group_name']   = $groupProfile->getGroupName();
+                $groupLists[$key]['group_icon']   = $groupProfile->getGroupIcon();
             }
             $pageTotalNum = $groupListResponse->getPageTotalNum();
             return [
@@ -109,6 +133,49 @@ class ZalyHelper
                 'group_list' => [],
                 'total_num'  => 0
             ];
+        }
+    }
+
+    public function getGroupProfile($groupId)
+    {
+        $request = new Akaxin\Proto\Plugin\HaiGroupProfileRequest();
+        $request->setGroupId($groupId);
+        $responseData = $this->akaxinApiClient->request("/hai/group/profile", $request);
+        $response = new Akaxin\Proto\Plugin\HaiGroupProfileResponse();
+        $response->mergeFromString($responseData);
+        $groupProfile = $response->getProfile();
+        return $groupProfile;
+    }
+
+    /**
+     * 返回不在群里的用户
+     *
+     * @param $siteUserIds
+     * @param $groupId
+     * @param string $type
+     * @return array
+     * @throws \Google\Protobuf\Internal\Exception
+     */
+    public function checkGroupMember($siteUserIds, $groupId, $type="none_in_group")
+    {
+        $request = new Akaxin\Proto\Plugin\HaiGroupCheckMemberRequest();
+        $request->setGroupId($groupId);
+        $request->setSiteUserId($siteUserIds);
+        $responseData = $this->akaxinApiClient->request("/hai/group/checkMember", $request);
+        if($responseData) {
+            $response = new Akaxin\Proto\Plugin\HaiGroupCheckMemberResponse();
+            $response->mergeFromString($responseData);
+            $memberSiteUserIds = $response->getMembersSiteUserId();
+            $notGroupMembers = [];
+            $groupMembers    = [];
+            foreach ($memberSiteUserIds as $key => $siteUserId) {
+                if(in_array($siteUserId, $siteUserIds)) {
+                    $groupMembers[] = $siteUserId;
+                } else {
+                    $notGroupMembers[] = $siteUserId;
+                }
+            }
+            return $type == "none_in_group" ? $notGroupMembers : $groupMembers;
         }
     }
 
