@@ -11,8 +11,7 @@
 require_once(__DIR__ . "/../../sdk-php/AkaxinPluginApiClient.php");
 
 require_once(__DIR__ . "/config.php");
-//require_once("/akaxin/guessNum/config.php");
-require_once(__DIR__ . "/dbHelper.php");
+//require_once("/akaxin/group/config.php");
 require_once(__DIR__ . "/../helper/zalyHelper.php");
 
 
@@ -34,7 +33,6 @@ class Group
 
     public $cssForWebmsg;
 
-    public $dbHelper;
     public $zalyHelper;
     public $pluginId;
     private $defaultMaxPage = 1;///临时默认请求最大页数
@@ -58,7 +56,6 @@ class Group
         $this->pluginId = $config['plugin_id'];
         $this->siteAddress = $config['site_address'];
         $this->pluginHttpDomain = $config['plugin_http_domain'];
-        $this->dbHelper   = DBHelper::getInstance($config);
         $this->zalyHelper = ZalyHelper::getInstance($config);
         ////
 
