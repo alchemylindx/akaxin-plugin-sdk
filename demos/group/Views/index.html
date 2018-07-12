@@ -47,6 +47,7 @@
                     <?php } else { ?>
                         暂无数据
                     <?php } ?>
+
                 </div>
                 <input type="hidden" class="group_list_info" group-list='<?php echo json_encode($group_list, true);?>'>
                 <input type="hidden" class="config_name" data="<?php echo $config_name;?>">
@@ -54,17 +55,27 @@
             </div>
             <div class="like_or_no_like" style="width:100%; margin:0px auto;position:relative; margin-top: 0; "  >
                 <div class="col-xs-6 col-sm-* next_group "  url-data="/index.php">
-                    <button class="bubbly-next-button">给朕换下一个</button>
+                    <button class="bubbly-next-button" style="font-size: 12px;">给朕换下一个</button>
                 </div>
                 <div class="col-xs-6 col-sm-* join_group "   url-data="/index.php?page_type=join_group">
-                    <button class="bubbly-button">加入群聊!</button>
+                    <button class="bubbly-button"  style="font-size: 12px;">加入群聊!</button>
                 </div>
             </div>
 
         </div>
 
     </div>
+    <div class="position_absolute guide_div"  id="guide_div" style="text-align: center;vertical-align:middle; ">
+        <div id="guide_right" class="animated" style=" transform: translate(-50%,-50%); position: absolute; top: 40%; left:30%; overflow: hidden; width:150px;display:none;">
+            <img style="width: 150px;" src="<?php echo $http_domain;?>/Public/img/right.png">
+            <p style="font-size: 12px;color: #ff0081;">对我感兴趣，右滑加入我啊<br/>(｡･ω･｡)ﾉ♡</p>
+        </div>
+        <div id="guide_left" class="animated" style=" transform: translate(-50%,-50%); position: absolute; top: 40%; right:5%;overflow: hidden; width:100px; display:none;" >
+            <img style=" width:100px;" src="<?php echo $http_domain;?>/Public/img/left.png">
+            <p style="font-size: 12px;color: #ff0081;">左滑，给朕换一个<br/>ｸﾞｯ!(๑•̀ㅂ•́)و✧</p>
+        </div>
 
+    </div>
 </div>
 
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
@@ -80,6 +91,27 @@
     $(document).on("click", ".join_group", function() {
         joinGroup();
     });
+    setTimeout(function(){
+        document.getElementById("guide_right").style.display="block";
+    }, 500);
+
+
+    setTimeout(function(){
+        $("#guide_right").addClass("fadeOutRight");
+    }, 1500);
+
+    setTimeout(function(){
+        document.getElementById("guide_left").style.display="block";
+    }, 2000);
+
+    setTimeout(function(){
+        $("#guide_left").addClass("fadeOutLeft");
+    }, 3000);
+
+    setTimeout(function(){
+        document.getElementById("guide_div").remove();
+    }, 3500);
+
     function joinGroup() {
         var groupId = $('.join_group').attr("site-group-id");
         var configName = $(".config_name").attr('data');
@@ -130,7 +162,8 @@
                     groupListArr = JSON.parse(groupListJsonStr);
                     groupInfo = groupListArr.shift();
                     if(!groupInfo) {
-                        Zaly.tip("ｸﾞｯ!(๑•̀ㅂ•́)و✧ｸﾞｯ!(๑•̀ㅂ•́)و✧ 休息一下吧")
+                        page = 0;
+                        nextGroupInfo();
                     }
                     addGroupInfo(groupInfo);
                 }
@@ -149,11 +182,16 @@
         }
     }
 
+
+
+
     $(document).ready(function(){
         var groupInfo  = groupListArr.shift();
         if(groupInfo) {
             addGroupInfo(groupInfo);
         }
+
+
     });
 
     function jsimageDownload(result, imageid, imageLocalPath) {

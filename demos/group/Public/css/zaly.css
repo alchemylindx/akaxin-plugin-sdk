@@ -329,6 +329,20 @@ a, a:hover{
     box-shadow: 1px 1px 1px 1px #cccccc;
 }
 
+.guide{
+    position:absolute;
+    top: 0;
+    bottom:0;
+    left: 0;
+    right: 0;
+    width:70%;
+    margin: 9% auto;
+    height: 70%;
+    border-radius: 2%;
+    background-color: #FFFFFF;
+    box-shadow: 1px 1px 1px 1px #cccccc;
+}
+
 .width_35{
     width:35%;
 }
