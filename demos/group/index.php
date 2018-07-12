@@ -37,6 +37,7 @@ class Group
     public $dbHelper;
     public $zalyHelper;
     public $pluginId;
+    private $defaultMaxPage = 1;///临时默认请求最大页数
 
     /**
      * @return GuessNum|null
@@ -115,6 +116,9 @@ eot;
 
     public function getGroupLists($page = 1, $pageSize = 15)
     {
+        if($page > $this->defaultMaxPage) {
+            $page = $this->defaultMaxPage;
+        }
         $result = $this->zalyHelper->getGroupLists($page, $pageSize);
         return $result;
     }
