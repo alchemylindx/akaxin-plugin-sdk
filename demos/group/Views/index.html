@@ -22,32 +22,26 @@
                 <div class="like_second" >
                 </div>
                 <div class="content_div">
-                    <?php if (isset($group_list[0])) { ?>
-                    <div class="like_height group_info animated  fadeInRight" site-group-id="<?php echo $group_list[0]['group_id'];?>" >
+                    <div class="like_height group_info " style="display: none" id="no_group">
                         <div class=" center-block position_absolute" >
                             <div class=" position_absolute  ">
-                                <img class="group_icon img-thumbnail <?php echo $group_list[0]['group_icon']?> " site-group-logo="<?php echo $group_list[0]['group_icon'];?>" style="top:20%; height: 75%;width: 60%; overflow: hidden;">
+                                <img class="group_icon img-thumbnail " style=" margin-top:20%; height: 50%;width: 50%; overflow: hidden;" src="<?php echo $http_domain;?>/Public/img/no_group.png">
                             </div>
                         </div>
-                        <div  class=" position_absolute like_group_name"  style="top: 80%;">
-                            <?php echo $group_list[0]['group_name'];?>
+                        <div  class=" position_absolute like_group_name "  style="top: 70%; font-size: 16px;">
+                            还没有推荐的群组
                         </div>
-                        <div  class=" position_absolute like_group_desc"  style="top: 90%;">
-                            测试 测试
+                        <div  class=" position_absolute like_group_desc"  style="top: 80%;">
+                            (ಥ_ಥ)
                         </div>
                         <div class="position_absolute like_user_info_div " >
                             <div class="col-xs-5 col-sm-* ">
                                 <div class=" center-block position_absolute like_user_hometown ">
-                                    <label style="margin-top:10px"><br/></label>
                                     <br/>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <?php } else { ?>
-                        暂无数据
-                    <?php } ?>
-
                 </div>
                 <input type="hidden" class="group_list_info" group-list='<?php echo json_encode($group_list, true);?>'>
                 <input type="hidden" class="config_name" data="<?php echo $config_name;?>">
@@ -172,7 +166,6 @@
     }
     function addGroupInfo(group) {
         if(group) {
-            group.group_notice = "暂无详细介绍";
             $('.user_info').addClass('fadeOutLeft');
             $('.join_group').attr("site-group-id", group.group_id);
             html = '<div class="like_height group_info animated  fadeInRight" site-group-id="'+group.group_id+'" > <div class=" center-block position_absolute" > <div class=" position_absolute  "> <img class="group_icon img-thumbnail '+ group.group_icon+' " site-group-logo="'+ group.group_icon+'" style=" margin-top:20%; height: 50%;width: 40%; overflow: hidden;"> </div> </div> <div  class=" position_absolute like_group_name"  style="top: 70%;"> '+ group.group_name +'</div> <div  class=" position_absolute like_group_desc"  style="top: 80%;"> '+group.group_notice+' </div> <div class="position_absolute like_user_info_div " > <div class="col-xs-5 col-sm-* "> <div class=" center-block position_absolute like_user_hometown "> <label style="margin-top:10px"><br/></label> <br/> </div> </div> </div> </div>'
@@ -182,16 +175,13 @@
         }
     }
 
-
-
-
     $(document).ready(function(){
         var groupInfo  = groupListArr.shift();
         if(groupInfo) {
             addGroupInfo(groupInfo);
+        } else {
+            document.getElementById("no_group").style.display="block";
         }
-
-
     });
 
     function jsimageDownload(result, imageid, imageLocalPath) {

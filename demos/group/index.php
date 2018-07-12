@@ -11,7 +11,11 @@
 require_once(__DIR__ . "/../../sdk-php/AkaxinPluginApiClient.php");
 
 require_once(__DIR__ . "/config.php");
+require_once(__DIR__ . "/group_info.php");
+
 //require_once("/akaxin/group/config.php");
+//require_once("/akaxin/group/group_info.php");
+
 require_once(__DIR__ . "/../helper/zalyHelper.php");
 
 
@@ -32,11 +36,9 @@ class Group
     public static $instance = null;
 
     public $cssForWebmsg;
-
     public $zalyHelper;
     public $pluginId;
-    private $defaultMaxPage = 1;///临时默认请求最大页数
-
+    private $groupConfig;
     /**
      * @return GuessNum|null
      *
@@ -53,12 +55,12 @@ class Group
     private function __construct($configName)
     {
         $config = getConf($configName);
-        $this->pluginId = $config['plugin_id'];
-        $this->siteAddress = $config['site_address'];
+        $this->groupConfig      = getGroupInfoConfig($configName);
+        $this->pluginId         = $config['plugin_id'];
+        $this->siteAddress      = $config['site_address'];
         $this->pluginHttpDomain = $config['plugin_http_domain'];
-        $this->zalyHelper = ZalyHelper::getInstance($config);
+        $this->zalyHelper       = ZalyHelper::getInstance($config);
         ////
-
         $this->cssForWebmsg = <<<eot
             <link rel="stylesheet" href="{$this->pluginHttpDomain}/Public/css/zaly.css" />
 eot;
@@ -78,13 +80,11 @@ eot;
         if ($params) {
             extract($params, EXTR_SKIP);
         }
-
         include($path);
         $var = ob_get_contents();
         ob_end_clean();
         return  $var;
     }
-
 
     /**
      * 返回跟随的referer
@@ -113,10 +113,24 @@ eot;
 
     public function getGroupLists($page = 1, $pageSize = 15)
     {
-        if($page > $this->defaultMaxPage) {
-            $page = $this->defaultMaxPage;
+        $result = [];
+        try{
+            foreach($this->groupConfig  as $key => $groupInfo) {
+                $groupInfo = str_replace("，", ".", $groupInfo);
+                @list($groupId, $groupNotice) = explode(",", $groupInfo);
+                error_log("group_notice === " . $groupNotice);
+                $groupProfile = $this->zalyHelper->getGroupProfile($groupId);
+                if($groupProfile) {
+                    $result['group_list'][$key]['group_id']     = $groupProfile->getId();
+                    $result['group_list'][$key]['group_name']   = $groupProfile->getName();
+                    $result['group_list'][$key]['group_icon']   = $groupProfile->getIcon();
+                    $result['group_list'][$key]['group_notice'] = $groupNotice;
+                }
+            }
+        }catch (Exception $e) {
+            error_log($e->getMessage());
         }
-        $result = $this->zalyHelper->getGroupLists($page, $pageSize);
+
         return $result;
     }
 
@@ -140,7 +154,6 @@ eot;
         }
         return $result;
     }
-
 }
 
 $configName = isset($_GET['config_name']) ? $_GET['config_name'] : "default";
