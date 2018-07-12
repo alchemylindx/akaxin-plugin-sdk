@@ -183,6 +183,7 @@ switch ($pageType) {
     case "first":
         $urlParams['http_domain'] = $group->pluginHttpDomain;
         $urlParams['config_name'] = $configName;
+        $urlParams['suffix'] = 1529906859225;
         $groupLists = $group->getGroupLists($page, $pageSize);
         $urlParams = array_merge($urlParams, $groupLists);
         echo $group->render("index", $urlParams);
